@@ -1,0 +1,3133 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap");
+@import "tailwindcss";
+
+:root {
+  --erp-font-body: "Manrope", "Trebuchet MS", "Segoe UI", sans-serif;
+  --erp-font-heading: "Sora", "Avenir Next", "Segoe UI", sans-serif;
+  --erp-bg-base: #f6f8fc;
+  --erp-surface: #ffffff;
+  --erp-surface-soft: #f8fafc;
+  --erp-border: #e2e8f0;
+  --erp-text-strong: #0f172a;
+  --erp-text-muted: #475569;
+  --erp-primary: #2563eb;
+  --erp-primary-soft: #dbeafe;
+  font-family: var(--erp-font-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.08) 0%, rgba(37, 99, 235, 0) 38%),
+    linear-gradient(160deg, #f8fafc 0%, var(--erp-bg-base) 100%);
+  color: var(--erp-text-strong);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.login-switch-button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.login-switch-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 190px;
+  height: 60px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  box-shadow: inset 0 0 0 1px #cbd5e1;
+}
+
+.login-switch-container-simple {
+  background: #e2e8f0;
+  box-shadow: none;
+  transition: all 0.25s ease-in-out;
+}
+
+.login-switch-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1e293b;
+}
+
+.login-switch-button:hover .login-switch-container-simple,
+.login-switch-button:focus-visible .login-switch-container-simple,
+.login-switch-button:active .login-switch-container-simple {
+  background: #cbd5e1;
+  box-shadow: none;
+  transform: translateY(-1px);
+}
+
+.login-switch-button:focus-visible {
+  outline: 2px solid #fecaca;
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+.login-input {
+  border: 1px solid #cbd5e1;
+  outline: none;
+  border-radius: 15px;
+  padding: 1em;
+  background-color: #f8fafc;
+  box-shadow: none;
+  transition: 300ms ease-in-out;
+}
+
+.login-input:focus {
+  background-color: #ffffff;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.erp-dashboard-card-clickable {
+  cursor: pointer;
+}
+
+.erp-dashboard-shell {
+  min-height: 100vh;
+}
+
+.erp-dashboard-header {
+  position: relative;
+  z-index: 80;
+  border-bottom: 1px solid var(--erp-border);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+}
+
+.erp-dashboard-header-inner {
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.erp-dashboard-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.erp-dashboard-kicker {
+  margin: 0;
+  font-size: 0.74rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.erp-dashboard-title {
+  margin: 0;
+  font-family: var(--erp-font-heading);
+  font-size: clamp(1.55rem, 2.7vw, 2.2rem);
+  letter-spacing: -0.02em;
+  color: var(--erp-text-strong);
+}
+
+.erp-dashboard-actions {
+  flex-wrap: wrap;
+}
+
+.erp-session-pill {
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 0.48rem 0.95rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #1e40af;
+  background: #eff6ff;
+}
+
+.erp-dropdown-wrap {
+  position: relative;
+  z-index: 120;
+}
+
+.erp-nav-button-attendance {
+  background: linear-gradient(120deg, #2563eb, #3b82f6);
+  color: #fff;
+  border-color: transparent;
+}
+
+.erp-nav-button-notice {
+  background: linear-gradient(120deg, #0f766e, #14b8a6);
+  color: #fff;
+  border-color: transparent;
+}
+
+.erp-nav-button-notice:hover {
+  background: linear-gradient(120deg, #0f766e, #0d9488);
+}
+
+.erp-nav-button-leave {
+  background: linear-gradient(120deg, #7c3aed, #8b5cf6);
+  color: #fff;
+  border-color: transparent;
+}
+
+.erp-nav-button-leave:hover {
+  background: linear-gradient(120deg, #6d28d9, #7c3aed);
+}
+
+.erp-nav-button-guide {
+  background: linear-gradient(120deg, #0f766e, #0ea5a4);
+  color: #fff;
+  border-color: transparent;
+}
+
+.erp-nav-button-guide:hover {
+  background: linear-gradient(120deg, #0f766e, #0d9488);
+}
+
+.erp-nav-button-attendance:hover {
+  background: linear-gradient(120deg, #1d4ed8, #2563eb);
+}
+
+.erp-attendance-dropdown {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  min-width: 220px;
+  border: 1px solid #d4dce8;
+  border-radius: 1rem;
+  background: linear-gradient(145deg, #f6f9ff, #e6edf7);
+  box-shadow: -6px -6px 14px #ffffff, 6px 6px 16px #d3dce8;
+  padding: 0.4rem;
+  z-index: 140;
+}
+
+.erp-attendance-dropdown-item {
+  width: 100%;
+  border: 0;
+  border-radius: 0.75rem;
+  background: linear-gradient(145deg, #f2f6fd, #dfe7f3);
+  box-shadow: inset -2px -2px 4px #ffffff, inset 2px 2px 4px #ccd7e6;
+  text-align: left;
+  padding: 0.6rem 0.7rem;
+  color: #0f172a;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.erp-attendance-dropdown-item:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(145deg, #edf3fb, #d7e1ef);
+  box-shadow: inset -3px -3px 6px #ffffff, inset 3px 3px 6px #c3cfdf;
+}
+
+.erp-dashboard-content {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.erp-hero-shell {
+  margin-bottom: 1.2rem;
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 0.9rem;
+}
+
+.erp-hero-main {
+  border: 1px solid #7e22ce;
+  border-radius: 1.2rem;
+  padding: 1.2rem;
+  color: #fff;
+  background:
+    linear-gradient(115deg, rgba(124, 58, 237, 0.9), rgba(190, 24, 93, 0.88)),
+    radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.2), transparent 35%);
+  box-shadow: 0 14px 30px rgba(91, 33, 182, 0.28);
+}
+
+.erp-hero-kicker {
+  margin: 0;
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #f5d0fe;
+}
+
+.erp-hero-title {
+  margin: 0.45rem 0 0;
+  font-family: var(--erp-font-heading);
+  font-size: clamp(1.5rem, 2.9vw, 2.2rem);
+  line-height: 1.08;
+}
+
+.erp-hero-subtitle {
+  margin: 0.55rem 0 0;
+  max-width: 60ch;
+  color: #f8fafc;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.erp-hero-actions {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.52rem;
+}
+
+.erp-module-grid {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+}
+
+.erp-module-pill {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  padding: 0.28rem 0.62rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.erp-hero-panel {
+  border: 1px solid var(--erp-border);
+  border-radius: 1.2rem;
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.erp-hero-panel h3 {
+  margin: 0;
+  font-family: var(--erp-font-heading);
+  color: #0f172a;
+}
+
+.erp-hero-panel p {
+  margin: 0 0 0.35rem;
+  color: #64748b;
+  font-size: 0.84rem;
+}
+
+.erp-guide-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1rem;
+  border-radius: 1.25rem;
+  padding: 1rem;
+  background: linear-gradient(140deg, #0ea5e9, #2563eb);
+  box-shadow: 0 16px 34px rgba(30, 64, 175, 0.26);
+}
+
+.erp-guide-hero-copy {
+  color: #fff;
+}
+
+.erp-guide-hero-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.erp-guide-phone-row {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 280px;
+}
+
+.erp-guide-phone {
+  width: 140px;
+  height: 280px;
+  border-radius: 1.45rem;
+  border: 6px solid #0f172a;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 14px 24px rgba(15, 23, 42, 0.35);
+}
+
+.erp-guide-phone img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.erp-guide-phone.phone-2 {
+  transform: translateY(-22px);
+}
+
+.erp-guide-phone.phone-1,
+.erp-guide-phone.phone-3 {
+  width: 122px;
+  height: 246px;
+}
+
+.erp-guide-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.erp-guide-feature {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.9rem;
+  background: #fff;
+  padding: 0.72rem;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.erp-guide-flow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.72rem;
+}
+
+.erp-overview-card {
+  position: relative;
+  border: 1px solid var(--erp-border);
+  border-radius: 1.35rem;
+  background: var(--erp-surface);
+  padding: 1.5rem 1.4rem;
+  min-height: 238px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  overflow: hidden;
+}
+
+.erp-overview-card::before {
+  content: "";
+  position: absolute;
+  inset: -45% auto auto -30%;
+  width: 130px;
+  height: 130px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0));
+}
+
+.erp-overview-card:hover {
+  transform: translateY(-6px);
+  border-color: #bfdbfe;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+}
+
+.erp-overview-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.78rem;
+}
+
+.erp-overview-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.95rem;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(127, 29, 29, 0.28);
+}
+
+.erp-overview-title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+.erp-overview-value {
+  margin: 1.25rem 0 0;
+  font-family: var(--erp-font-heading);
+  font-size: clamp(2rem, 2.7vw, 2.45rem);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.erp-overview-note {
+  margin: 0.45rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.erp-nav-button {
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 0.54rem 1rem;
+  font-size: 0.72rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0f172a;
+  background: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.erp-nav-button:hover {
+  transform: translateY(-2px);
+  background: #f8fafc;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
+}
+
+/* Dashboard header button hover behavior */
+.erp-dashboard-shell .erp-nav-button:hover,
+.erp-dashboard-shell .erp-nav-button-attendance:hover,
+.erp-dashboard-shell .erp-nav-button-notice:hover,
+.erp-dashboard-shell .erp-nav-button-leave:hover {
+  background: linear-gradient(120deg, #0f766e, #0891b2);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 10px 20px rgba(8, 145, 178, 0.28);
+}
+
+.erp-dashboard-shell .erp-nav-button-guide:hover {
+  background: linear-gradient(120deg, #0ea5a4, #14b8a6);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 10px 20px rgba(20, 184, 166, 0.28);
+}
+
+.erp-card-action {
+  margin: 1.05rem 0 0;
+  color: #2563eb;
+  font-size: 0.74rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.erp-class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 1rem;
+}
+
+.erp-class-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 1.05rem;
+  background: var(--erp-surface);
+  padding: 1.05rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.erp-class-card:hover {
+  border-color: #bfdbfe;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+.erp-class-label {
+  margin: 0;
+  font-size: 1.05rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.erp-class-count {
+  margin: 0.35rem 0 0;
+  font-size: 0.84rem;
+  color: #64748b;
+}
+
+.erp-student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.erp-student-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 1.05rem;
+  border: 1px solid var(--erp-border);
+  background: var(--erp-surface);
+  padding: 0.8rem 1rem;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.erp-student-profile-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 1rem;
+  background: var(--erp-surface);
+  padding: 1rem;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+}
+
+.erp-student-profile-head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.erp-student-profile-grid {
+  margin-top: 0.85rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.erp-student-profile-grid span {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.7rem;
+  background: #f8fafc;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.78rem;
+  color: #334155;
+  font-weight: 600;
+}
+
+.erp-student-profile-actions {
+  margin-top: 0.85rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.erp-student-profile-sidebar .erp-student-profile-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  justify-content: stretch;
+}
+
+.erp-student-profile-sidebar .erp-student-profile-actions .erp-nav-button {
+  width: 100%;
+  justify-content: center;
+}
+
+.erp-student-compact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.8rem;
+}
+
+.erp-student-compact-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.95rem;
+  background: var(--erp-surface);
+  padding: 0.8rem;
+  text-align: left;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.erp-student-compact-card:hover {
+  transform: translateY(-3px);
+  border-color: #bfdbfe;
+  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.12);
+}
+
+.erp-student-compact-card-active {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.erp-student-compact-image,
+.erp-student-compact-avatar {
+  width: 52px;
+  height: 52px;
+}
+
+
+.erp-student-compact-name {
+  margin: 0.55rem 0 0;
+  font-size: 0.88rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.erp-student-compact-roll {
+  margin: 0.25rem 0 0;
+  font-size: 0.76rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.erp-student-compact-teacher {
+  margin: 0.2rem 0 0;
+  font-size: 0.74rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.erp-student-compact-action {
+  margin-top: 0.55rem;
+  width: 100%;
+  text-align: center;
+}
+
+.erp-student-compact-action-primary {
+  background: linear-gradient(120deg, #1d4ed8, #2563eb);
+  color: #fff;
+  border-color: transparent;
+}
+
+.erp-student-compact-action-primary:hover {
+  background: linear-gradient(120deg, #1e40af, #1d4ed8);
+}
+
+.erp-student-compact-action-secondary {
+  margin-top: 0.35rem;
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.erp-teacher-compact-card {
+  border: 1px solid #bae6fd;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.14), transparent 42%),
+    linear-gradient(145deg, #ffffff, #f0f9ff);
+  box-shadow: 0 12px 24px rgba(14, 116, 144, 0.12);
+}
+
+.erp-teacher-compact-card:hover {
+  transform: translateY(-4px);
+  border-color: #67e8f9;
+  box-shadow: 0 18px 30px rgba(14, 116, 144, 0.2);
+}
+
+.erp-teacher-compact-card-active {
+  border-color: #0891b2;
+  box-shadow: 0 0 0 2px rgba(8, 145, 178, 0.2), 0 16px 28px rgba(14, 116, 144, 0.2);
+}
+
+.erp-teacher-profile-button {
+  margin-top: 0.7rem;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: linear-gradient(120deg, #0f766e, #0891b2);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.erp-teacher-profile-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow: 0 10px 18px rgba(8, 145, 178, 0.28);
+}
+
+.erp-student-pagination {
+  margin-top: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.erp-fee-class-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.7rem;
+}
+
+.erp-fee-class-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.85rem;
+  background: #fff;
+  padding: 0.7rem;
+  text-align: left;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.erp-fee-class-card-active {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.erp-fee-toolbar {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.erp-fee-list-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1rem;
+}
+
+.erp-fee-status-pill {
+  border-radius: 999px;
+  padding: 0.2rem 0.48rem;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.erp-fee-status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.erp-fee-status-paid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.erp-fees-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 0 0, rgba(37, 99, 235, 0.1), transparent 34%),
+    radial-gradient(circle at 100% 0, rgba(15, 118, 110, 0.09), transparent 30%),
+    #f8fbff;
+}
+
+.erp-fees-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.erp-fees-sidebar {
+  position: sticky;
+  top: 90px;
+  border: 1px solid var(--erp-border);
+  border-radius: 1rem;
+  background: #fff;
+  padding: 0.6rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.erp-fees-side-btn {
+  border: 1px solid #dbeafe;
+  border-radius: 0.8rem;
+  background: #eff6ff;
+  color: #1e3a8a;
+  padding: 0.6rem 0.7rem;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.erp-fees-side-btn-active {
+  background: linear-gradient(120deg, #1d4ed8, #2563eb);
+  border-color: transparent;
+  color: #fff;
+}
+
+.erp-fees-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.erp-fees-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.erp-fees-role-badge {
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  background: #eff6ff;
+  color: #1e40af;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.erp-fees-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.erp-fees-kpi-grid-tight {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.erp-fees-kpi-card {
+  border: 1px solid var(--erp-border);
+  border-left: 3px solid #2563eb;
+  border-radius: 0.9rem;
+  background: #fff;
+  padding: 0.75rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.erp-fees-kpi-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.erp-fees-kpi-card strong {
+  display: block;
+  margin-top: 0.28rem;
+  font-size: 1.15rem;
+  color: #0f172a;
+}
+
+.erp-fees-section-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.erp-fees-span-2 {
+  grid-column: span 2;
+}
+
+.erp-fees-chart {
+  width: 100%;
+  height: 220px;
+}
+
+.erp-fees-axis {
+  stroke: #cbd5e1;
+  stroke-width: 1.5;
+}
+
+.erp-fees-line {
+  fill: none;
+  stroke: #2563eb;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.erp-fees-bar-wrap {
+  min-height: 220px;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.55rem;
+}
+
+.erp-fees-bar-item {
+  flex: 1;
+  text-align: center;
+}
+
+.erp-fees-bar-item p {
+  margin: 0.35rem 0 0;
+  color: #334155;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.erp-fees-bar-outer {
+  height: 180px;
+  border: 1px solid #dbeafe;
+  border-radius: 0.65rem;
+  background: #eff6ff;
+  padding: 0.22rem;
+  display: flex;
+  align-items: flex-end;
+}
+
+.erp-fees-bar-fill {
+  width: 100%;
+  border-radius: 0.45rem;
+  background: linear-gradient(180deg, #60a5fa, #1d4ed8);
+}
+
+.erp-fees-pie-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.erp-fees-pie {
+  width: 190px;
+  height: 190px;
+  border-radius: 999px;
+  border: 8px solid #fff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+}
+
+.erp-fees-pie-legend p {
+  margin: 0.35rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.erp-fees-pie-legend span {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.erp-fees-native-select {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.72rem;
+  padding: 0.62rem 0.72rem;
+  font: inherit;
+  background: #fff;
+  color: #0f172a;
+}
+
+.erp-fees-native-select:focus {
+  outline: 3px solid rgba(59, 130, 246, 0.2);
+  border-color: #93c5fd;
+}
+
+.erp-fees-action-row {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.erp-fees-ledger-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 1rem;
+}
+
+.erp-fees-ledger-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.erp-fees-ledger-item {
+  border: 1px solid #dbeafe;
+  border-radius: 0.75rem;
+  background: #eff6ff;
+  padding: 0.6rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.erp-fees-ledger-item strong {
+  display: block;
+  font-size: 0.86rem;
+  color: #0f172a;
+}
+
+.erp-fees-ledger-item small {
+  color: #475569;
+  font-size: 0.74rem;
+}
+
+.erp-fees-ledger-item-active {
+  background: linear-gradient(120deg, #1d4ed8, #2563eb);
+  border-color: transparent;
+}
+
+.erp-fees-ledger-item-active strong,
+.erp-fees-ledger-item-active small {
+  color: #fff;
+}
+
+.erp-fees-structure-table-wrap {
+  margin-top: 0.7rem;
+  overflow: auto;
+}
+
+.erp-fees-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.erp-fees-table th,
+.erp-fees-table td {
+  border: 1px solid var(--erp-border);
+  padding: 0.48rem 0.55rem;
+  text-align: left;
+  font-size: 0.78rem;
+}
+
+.erp-fees-table th {
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 800;
+}
+
+.erp-fees-access-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.erp-fees-access-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.85rem;
+  background: #fff;
+  padding: 0.75rem;
+}
+
+.erp-fees-access-card h3 {
+  margin: 0 0 0.45rem;
+  color: #0f172a;
+  font-size: 0.9rem;
+}
+
+.erp-fees-access-card ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.erp-fees-access-card li {
+  color: #475569;
+  font-size: 0.79rem;
+  margin-bottom: 0.25rem;
+}
+
+.erp-student-profile-page {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 1rem;
+}
+
+.erp-student-profile-sidebar {
+  border: 1px solid var(--erp-border);
+  border-radius: 1rem;
+  background: var(--erp-surface);
+  padding: 1rem;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+}
+
+.erp-student-profile-sidebar h3 {
+  margin: 0.8rem 0 0.2rem;
+  font-family: var(--erp-font-heading);
+  color: #0f172a;
+}
+
+.erp-student-profile-sidebar p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.erp-student-profile-pills {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.erp-student-profile-pills span {
+  border-radius: 999px;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1e40af;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.erp-student-profile-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.9rem;
+  object-fit: cover;
+  border: 1px solid #bfdbfe;
+}
+
+.erp-student-profile-cover-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-family: var(--erp-font-heading);
+  color: #1e3a8a;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+}
+
+.erp-student-profile-main {
+  border: 1px solid var(--erp-border);
+  border-radius: 1rem;
+  background: var(--erp-surface);
+  padding: 1rem;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+}
+
+.erp-student-photo-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.erp-student-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #1e3a8a;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #93c5fd;
+  box-shadow: none;
+}
+
+.erp-student-avatar-image {
+  width: 58px;
+  height: 58px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid #93c5fd;
+}
+
+.erp-student-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+
+.erp-student-name {
+  margin: 0;
+  font-size: 1rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.erp-student-meta {
+  margin: 0;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.erp-attendance-workspace {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 1rem;
+}
+
+.erp-notice-shell {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1rem;
+}
+
+.erp-notice-form-card,
+.erp-notice-preview-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 1rem;
+  background: var(--erp-surface);
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.erp-notice-channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.erp-notice-channels label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.86rem;
+  color: #334155;
+  font-weight: 600;
+}
+
+.erp-notice-status {
+  margin: 0.75rem 0 0;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.72rem;
+  padding: 0.55rem 0.7rem;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.erp-notice-preview-count {
+  margin: 0 0 0.6rem;
+  color: #64748b;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.erp-notice-recipient-list,
+.erp-notice-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 280px;
+  overflow: auto;
+  margin-bottom: 1rem;
+}
+
+.erp-notice-recipient-item,
+.erp-notice-history-item {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.75rem;
+  background: #f8fafc;
+  padding: 0.55rem 0.65rem;
+}
+
+.erp-notice-recipient-item p,
+.erp-notice-history-item p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.erp-notice-recipient-item small,
+.erp-notice-history-item small {
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.erp-leave-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.erp-leave-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.erp-leave-summary-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.8rem;
+  background: var(--erp-surface);
+  padding: 0.75rem;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.erp-leave-summary-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.erp-leave-summary-card strong {
+  font-size: 1.25rem;
+  color: #0f172a;
+  font-family: var(--erp-font-heading);
+}
+
+.erp-leave-panel {
+  border: 1px solid var(--erp-border);
+  border-radius: 1rem;
+  background: var(--erp-surface);
+  padding: 1rem;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.erp-leave-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.erp-leave-item {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.85rem;
+  background: #f8fafc;
+  padding: 0.72rem 0.78rem;
+}
+
+.erp-leave-item-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.erp-leave-status-pill {
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.erp-leave-status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.erp-leave-status-approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.erp-leave-status-rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.erp-leave-actions {
+  margin-top: 0.65rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.erp-attendance-top-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.erp-attendance-top-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.8rem;
+  background: var(--erp-surface);
+  padding: 0.65rem 0.7rem;
+}
+
+.erp-attendance-top-card p {
+  margin: 0;
+  font-size: 0.74rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.erp-attendance-top-card strong {
+  font-size: 1.1rem;
+  color: #0f172a;
+  font-family: var(--erp-font-heading);
+}
+
+.erp-attendance-search {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.erp-attendance-search span {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.erp-attendance-search input {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.72rem;
+  padding: 0.58rem 0.68rem;
+  font: inherit;
+  background: #fff;
+  color: #0f172a;
+}
+
+.erp-attendance-search input:focus {
+  outline: 3px solid rgba(59, 130, 246, 0.2);
+  border-color: #93c5fd;
+}
+
+.erp-search-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.erp-search-input-row input {
+  flex: 1;
+}
+
+.erp-search-clear-btn {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.72rem;
+  background: #fff;
+  color: #334155;
+  font-family: var(--erp-font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.42rem 0.72rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.erp-search-clear-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.erp-attendance-left,
+.erp-attendance-right {
+  border: 1px solid var(--erp-border);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.9rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.erp-attendance-person-header {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.erp-attendance-calendar-shell {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.9rem;
+  padding: 0.75rem;
+}
+
+.erp-attendance-calendar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 0.55rem;
+}
+
+.erp-attendance-month-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.erp-attendance-month-select {
+  border: 1px solid #bfdbfe;
+  border-radius: 0.75rem;
+  background:
+    linear-gradient(145deg, #ffffff, #eff6ff);
+  color: #1e3a8a;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.45rem 2rem 0.45rem 0.65rem;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.12);
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #2563eb 50%),
+    linear-gradient(135deg, #2563eb 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) calc(50% - 2px),
+    calc(100% - 9px) calc(50% - 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.erp-attendance-month-select:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.18);
+  transform: translateY(-1px);
+}
+
+.erp-attendance-month-select:focus {
+  outline: 3px solid rgba(59, 130, 246, 0.2);
+  border-color: #60a5fa;
+}
+
+.erp-attendance-month-label {
+  margin: 0;
+  font-family: var(--erp-font-heading);
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.erp-attendance-legend {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.erp-attendance-quick-actions {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.8rem;
+  padding: 0.6rem 0.62rem;
+  margin-bottom: 0.65rem;
+  background: #f8fafc;
+}
+
+.erp-attendance-quick-actions p {
+  margin: 0 0 0.45rem;
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.erp-attendance-today-status {
+  color: #0f172a;
+  font-family: var(--erp-font-heading);
+}
+
+.erp-attendance-quick-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.erp-attendance-quick-btn {
+  border: 1px solid var(--erp-border);
+  border-radius: 999px;
+  padding: 0.28rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: #fff;
+  color: #0f172a;
+}
+
+.erp-attendance-quick-present {
+  border-color: #86efac;
+  color: #166534;
+  background: #f0fdf4;
+}
+
+.erp-attendance-quick-absent {
+  border-color: #fcd34d;
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.erp-attendance-quick-leave {
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.erp-legend-item {
+  border-radius: 999px;
+  font-size: 0.72rem;
+  padding: 0.24rem 0.55rem;
+  font-weight: 700;
+}
+
+.erp-legend-present {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.erp-legend-absent {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.erp-legend-leave {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.erp-attendance-week-grid,
+.erp-attendance-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.erp-attendance-week-label {
+  text-align: center;
+  font-size: 0.74rem;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.erp-attendance-day,
+.erp-attendance-day-empty {
+  min-height: 40px;
+  border-radius: 0.65rem;
+}
+
+.erp-attendance-day {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #1e293b;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.erp-attendance-empty {
+  background: #fff;
+}
+
+.erp-attendance-present {
+  background: #dcfce7;
+  border-color: #4ade80;
+  color: #166534;
+}
+
+.erp-attendance-absent {
+  background: #fef3c7;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.erp-attendance-leave {
+  background: #dbeafe;
+  border-color: #60a5fa;
+  color: #1d4ed8;
+}
+
+.erp-attendance-today {
+  box-shadow: inset 0 0 0 2px #2563eb;
+}
+
+.erp-attendance-day-empty {
+  background: transparent;
+}
+
+.erp-attendance-report {
+  margin-top: 0.85rem;
+}
+
+.erp-attendance-report-title {
+  margin: 0 0 0.55rem;
+  font-family: var(--erp-font-heading);
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.erp-attendance-report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.erp-attendance-report-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.75rem;
+  padding: 0.45rem 0.6rem;
+  background: #fff;
+}
+
+.erp-attendance-report-card p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.erp-attendance-report-card strong {
+  color: #0f172a;
+  font-family: var(--erp-font-heading);
+}
+
+.erp-attendance-report-line {
+  margin: 0.55rem 0 0;
+  color: #334155;
+  font-size: 0.84rem;
+}
+
+.erp-attendance-right-title {
+  margin: 0 0 0.65rem;
+  font-family: var(--erp-font-heading);
+  color: #0f172a;
+}
+
+.erp-attendance-side-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 530px;
+  overflow: auto;
+}
+
+.erp-attendance-side-item {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.8rem;
+  padding: 0.42rem;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.erp-attendance-side-item strong {
+  display: block;
+  color: #0f172a;
+  font-size: 0.86rem;
+}
+
+.erp-attendance-side-item small {
+  color: #64748b;
+  font-size: 0.74rem;
+}
+
+.erp-student-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.46);
+}
+
+.erp-student-modal {
+  position: relative;
+  width: min(860px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: 1.3rem;
+  border: 1px solid var(--erp-border);
+  background: #ffffff;
+  padding: 1.25rem;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.22);
+}
+
+.erp-modal-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 0.42rem 0.82rem;
+  font-size: 0.72rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 700;
+  color: #0f172a;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.erp-modal-header {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.erp-modal-photo {
+  width: 92px;
+  height: 92px;
+  border-radius: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  color: #1e3a8a;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #93c5fd;
+}
+
+.erp-modal-photo-image {
+  width: 92px;
+  height: 92px;
+  border-radius: 1.1rem;
+  object-fit: cover;
+  border: 2px solid #93c5fd;
+}
+
+.erp-modal-name {
+  margin: 0;
+  font-size: 1.35rem;
+  font-family: var(--erp-font-heading);
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.erp-modal-subtitle {
+  margin: 0.25rem 0 0;
+  color: #64748b;
+}
+
+.erp-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.erp-modal-card {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.95rem;
+  background: #fff;
+  padding: 0.8rem;
+}
+
+.erp-modal-card p {
+  margin: 0.28rem 0;
+  color: #334155;
+  font-size: 0.89rem;
+}
+
+.erp-modal-card-title {
+  margin: 0 0 0.4rem;
+  font-size: 0.84rem;
+  font-family: var(--erp-font-heading);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.erp-form-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.erp-form-section {
+  border: 1px solid var(--erp-border);
+  border-radius: 1rem;
+  background: var(--erp-surface);
+  padding: 1.1rem;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.erp-form-title {
+  margin: 0 0 0.9rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #1e293b;
+}
+
+.erp-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.erp-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.erp-form-field span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.erp-form-field input,
+.erp-form-field textarea {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.72rem;
+  padding: 0.62rem 0.72rem;
+  font: inherit;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.erp-custom-select-wrap {
+  position: relative;
+}
+
+.erp-custom-select-disabled {
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.erp-custom-select-trigger {
+  width: 100%;
+  min-height: 46px;
+  border: 1.5px solid #a5f3fc;
+  border-radius: 0.95rem;
+  background: #fff;
+  color: #0f172a;
+  padding: 0.62rem 0.86rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.erp-custom-select-trigger:hover {
+  border-color: #22d3ee;
+  background: #ecfeff;
+}
+
+.erp-custom-select-open {
+  border-color: #0891b2;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+}
+
+.erp-custom-select-value {
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.erp-custom-select-placeholder {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.erp-custom-select-chevron {
+  width: 1rem;
+  height: 1rem;
+  color: #0e7490;
+  transition: transform 0.2s ease;
+}
+
+.erp-custom-select-chevron-open {
+  transform: rotate(180deg);
+}
+
+.erp-custom-select-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  border: 1px solid #bae6fd;
+  border-radius: 0.95rem;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(8, 47, 73, 0.16);
+  padding: 0.45rem;
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+.erp-custom-select-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.erp-custom-select-menu::-webkit-scrollbar-track {
+  background: #ecfeff;
+  border-radius: 999px;
+}
+
+.erp-custom-select-menu::-webkit-scrollbar-thumb {
+  background: #67e8f9;
+  border-radius: 999px;
+}
+
+.erp-custom-select-item {
+  width: 100%;
+  border: 0;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: #0f172a;
+  padding: 0.6rem 0.62rem;
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.erp-custom-select-item:hover {
+  background: #ecfeff;
+  color: #155e75;
+}
+
+.erp-custom-select-item-active {
+  background: #cffafe;
+  color: #155e75;
+}
+
+.erp-custom-select-item-icon {
+  display: inline-flex;
+}
+
+.erp-form-field input:focus,
+.erp-form-field textarea:focus {
+  outline: 3px solid rgba(59, 130, 246, 0.2);
+  outline-offset: 0;
+  border-color: #93c5fd;
+  background: #fff;
+}
+
+.erp-form-field-full {
+  grid-column: 1 / -1;
+}
+
+.erp-student-photo-uploader {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.erp-student-photo-preview-wrap {
+  width: 140px;
+  height: 140px;
+  border-radius: 1rem;
+  border: 1px dashed #93c5fd;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.erp-student-photo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.erp-student-photo-placeholder {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.erp-form-hint {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.erp-form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.erp-form-primary-button {
+  border: 0;
+  border-radius: 0.72rem;
+  padding: 0.62rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(120deg, #1d4ed8, #2563eb);
+  cursor: pointer;
+}
+
+/* Add Student Page: colorful premium form treatment */
+.erp-add-student-page {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(244, 63, 94, 0.14), transparent 36%),
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.16), transparent 34%),
+    radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.12), transparent 30%),
+    linear-gradient(160deg, #fff7f9 0%, #fff8f1 46%, #f7fbff 100%);
+}
+
+.erp-add-student-header {
+  border-bottom-color: #fecdd3;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.88));
+}
+
+.erp-add-student-form {
+  gap: 1.15rem;
+}
+
+.erp-add-student-page .erp-form-section {
+  border: 1px solid #fbcfe8;
+  border-top: 4px solid #f43f5e;
+  border-radius: 1.05rem;
+  background: linear-gradient(145deg, #ffffff, #fff6fb);
+  box-shadow: 0 14px 30px rgba(244, 63, 94, 0.08);
+}
+
+.erp-add-student-page .erp-form-section:nth-of-type(2n) {
+  border-color: #c4b5fd;
+  border-top-color: #8b5cf6;
+  background: linear-gradient(145deg, #ffffff, #f8f5ff);
+  box-shadow: 0 14px 30px rgba(139, 92, 246, 0.08);
+}
+
+.erp-add-student-page .erp-form-section:nth-of-type(3n) {
+  border-color: #bfdbfe;
+  border-top-color: #2563eb;
+  background: linear-gradient(145deg, #ffffff, #f1f7ff);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.08);
+}
+
+.erp-add-student-page .erp-form-title {
+  color: #7f1d1d;
+  letter-spacing: 0.08em;
+}
+
+.erp-add-student-page .erp-form-field span {
+  color: #7f1d1d;
+}
+
+.erp-add-student-page .erp-form-field input,
+.erp-add-student-page .erp-form-field textarea {
+  border-color: #fbcfe8;
+  background: #fff;
+}
+
+.erp-add-student-page .erp-form-field input:focus,
+.erp-add-student-page .erp-form-field textarea:focus {
+  outline: 3px solid rgba(244, 63, 94, 0.16);
+  border-color: #fb7185;
+}
+
+.erp-add-student-page .erp-student-photo-preview-wrap {
+  border: 1px dashed #fb7185;
+  background: linear-gradient(145deg, #fff1f2, #ffe4e6);
+}
+
+.erp-add-student-page .erp-form-primary-button {
+  border-radius: 0.82rem;
+  background: linear-gradient(120deg, #e11d48, #2563eb);
+  box-shadow: 0 12px 22px rgba(225, 29, 72, 0.26);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.erp-add-student-page .erp-form-primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.28);
+}
+
+.erp-premium-entry-form {
+  counter-reset: erp-form-step;
+}
+
+.erp-premium-entry-form .erp-form-section {
+  position: relative;
+  padding: 1.2rem;
+}
+
+.erp-premium-entry-form .erp-form-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.erp-premium-entry-form .erp-form-title::before {
+  counter-increment: erp-form-step;
+  content: counter(erp-form-step, decimal-leading-zero);
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+.erp-form-quick-note {
+  margin: 0;
+  border: 1px dashed #bae6fd;
+  border-radius: 0.9rem;
+  padding: 0.72rem 0.86rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #0f766e;
+  background: rgba(236, 254, 255, 0.72);
+}
+
+.erp-form-actions-sticky {
+  position: sticky;
+  bottom: 0.6rem;
+  z-index: 12;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 0.95rem;
+  padding: 0.72rem;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
+}
+
+.erp-add-student-form .erp-form-grid,
+.erp-add-teacher-form .erp-form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.erp-add-student-form .erp-form-field input,
+.erp-add-student-form .erp-form-field textarea,
+.erp-add-teacher-form .erp-form-field input,
+.erp-add-teacher-form .erp-form-field textarea {
+  min-height: 44px;
+  border-width: 1.2px;
+}
+
+.erp-add-teacher-page {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(20, 184, 166, 0.14), transparent 36%),
+    radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.18), transparent 35%),
+    radial-gradient(circle at 50% 100%, rgba(37, 99, 235, 0.12), transparent 30%),
+    linear-gradient(160deg, #f4fffe 0%, #f0fbff 52%, #f8faff 100%);
+}
+
+.erp-add-teacher-header {
+  border-bottom-color: #bae6fd;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.88));
+}
+
+.erp-add-teacher-form {
+  gap: 1.15rem;
+}
+
+.erp-add-teacher-page .erp-form-section {
+  border: 1px solid #bae6fd;
+  border-top: 4px solid #0891b2;
+  border-radius: 1.05rem;
+  background: linear-gradient(145deg, #ffffff, #f0fcff);
+  box-shadow: 0 14px 30px rgba(8, 145, 178, 0.08);
+}
+
+.erp-add-teacher-page .erp-form-section:nth-of-type(2n) {
+  border-color: #bfdbfe;
+  border-top-color: #2563eb;
+  background: linear-gradient(145deg, #ffffff, #eef4ff);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.08);
+}
+
+.erp-add-teacher-page .erp-form-section:nth-of-type(3n) {
+  border-color: #99f6e4;
+  border-top-color: #0f766e;
+  background: linear-gradient(145deg, #ffffff, #ecfeff);
+  box-shadow: 0 14px 30px rgba(15, 118, 110, 0.08);
+}
+
+.erp-add-teacher-page .erp-form-title,
+.erp-add-teacher-page .erp-form-field span {
+  color: #0f172a;
+}
+
+.erp-add-teacher-page .erp-form-field input,
+.erp-add-teacher-page .erp-form-field textarea {
+  border-color: #bae6fd;
+}
+
+.erp-add-teacher-page .erp-form-field input:focus,
+.erp-add-teacher-page .erp-form-field textarea:focus {
+  outline: 3px solid rgba(14, 165, 233, 0.15);
+  border-color: #0ea5e9;
+}
+
+.erp-add-teacher-page .erp-student-photo-preview-wrap {
+  border: 1px dashed #06b6d4;
+  background: linear-gradient(145deg, #ecfeff, #e0f2fe);
+}
+
+.erp-add-teacher-page .erp-form-primary-button {
+  border-radius: 0.82rem;
+  background: linear-gradient(120deg, #0e7490, #2563eb);
+  box-shadow: 0 12px 22px rgba(14, 116, 144, 0.26);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.erp-add-teacher-page .erp-form-primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.28);
+}
+
+@media (min-width: 1280px) {
+  .erp-add-student-form .erp-form-grid,
+  .erp-add-teacher-form .erp-form-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.erp-marksheet-page {
+  min-height: 100vh;
+}
+
+.erp-marksheet-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.erp-marksheet-editor {
+  border: 1px solid var(--erp-border);
+  border-radius: 1rem;
+  background: var(--erp-surface);
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  position: sticky;
+  top: 88px;
+}
+
+.erp-marksheet-subject-table-wrap {
+  margin-top: 0.85rem;
+  overflow: auto;
+}
+
+.erp-marksheet-subject-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.erp-marksheet-subject-table th,
+.erp-marksheet-subject-table td {
+  border: 1px solid var(--erp-border);
+  padding: 0.45rem 0.55rem;
+  text-align: left;
+  font-size: 0.82rem;
+}
+
+.erp-marksheet-subject-table input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.45rem;
+  font: inherit;
+}
+
+.erp-marksheet-preview {
+  min-width: 0;
+}
+
+.erp-marksheet-paper {
+  width: 100%;
+  max-width: 840px;
+  margin: 0 auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+}
+
+.erp-marksheet-paper-header {
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.erp-marksheet-paper-header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+}
+
+.erp-marksheet-paper-header h2 {
+  margin: 0;
+  font-family: var(--erp-font-heading);
+  color: #0f172a;
+}
+
+.erp-marksheet-paper-header p {
+  margin: 0.22rem 0 0;
+  color: #334155;
+  font-weight: 700;
+}
+
+.erp-marksheet-paper-header small {
+  color: #64748b;
+}
+
+.erp-marksheet-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 0.7rem;
+  border: 1px solid #cbd5e1;
+  object-fit: cover;
+  background: #fff;
+}
+
+.erp-marksheet-logo-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.08em;
+}
+
+.erp-marksheet-send-status {
+  margin: 0.75rem 0 0;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.7rem;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.55rem 0.65rem;
+}
+
+.erp-marksheet-student-block {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.erp-marksheet-student-block p {
+  margin: 0.24rem 0;
+  color: #1e293b;
+  font-size: 0.84rem;
+}
+
+.erp-marksheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.85rem;
+}
+
+.erp-marksheet-table th,
+.erp-marksheet-table td {
+  border: 1px solid #cbd5e1;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.84rem;
+  color: #1e293b;
+}
+
+.erp-marksheet-summary {
+  border: 1px solid #dbeafe;
+  border-radius: 0.7rem;
+  background: #f8fbff;
+  padding: 0.65rem 0.75rem;
+}
+
+.erp-marksheet-summary p {
+  margin: 0.22rem 0;
+  font-size: 0.84rem;
+  color: #1e293b;
+}
+
+.erp-marksheet-signatures {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.erp-marksheet-signatures div {
+  text-align: center;
+}
+
+.erp-marksheet-signatures span {
+  color: #475569;
+  font-size: 0.8rem;
+}
+
+.erp-marksheet-signatures p {
+  margin: 0.3rem 0 0;
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 0.8rem;
+}
+
+.erp-marksheet-signatures small {
+  color: #64748b;
+  font-size: 0.72rem;
+}
+
+.erp-marksheet-issued {
+  margin-top: 0.85rem;
+  text-align: right;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.no-print {
+  display: block;
+}
+
+@media (max-width: 800px) {
+  .erp-dashboard-header-inner {
+    align-items: flex-start;
+  }
+
+  .erp-dashboard-actions {
+    width: 100%;
+  }
+
+  .erp-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-student-photo-uploader {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-student-photo-preview-wrap {
+    width: 120px;
+    height: 120px;
+  }
+
+  .erp-attendance-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-fees-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-fees-sidebar {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .erp-fees-kpi-grid,
+  .erp-fees-section-grid,
+  .erp-fees-ledger-layout,
+  .erp-fees-access-grid,
+  .erp-fees-pie-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-fees-span-2 {
+    grid-column: span 1;
+  }
+
+  .erp-fees-kpi-grid-tight {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .erp-notice-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-fee-list-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-leave-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .erp-attendance-top-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-student-profile-page {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-hero-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-guide-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-student-profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-marksheet-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-marksheet-editor {
+    position: static;
+  }
+
+  .erp-marksheet-student-block {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-marksheet-signatures {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-marksheet-paper-header-brand {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .erp-dashboard-title {
+    font-size: 1.4rem;
+  }
+
+  .erp-nav-button,
+  .erp-session-pill {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding-top: 0.62rem;
+    padding-bottom: 0.62rem;
+  }
+
+  .erp-overview-card {
+    min-height: 206px;
+    padding: 1.2rem 1.1rem;
+  }
+
+  .erp-fees-head-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .erp-fees-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-overview-value {
+    font-size: 1.95rem;
+  }
+
+  .erp-guide-feature-grid,
+  .erp-guide-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-attendance-dropdown {
+    min-width: 190px;
+    left: 0;
+    right: auto;
+  }
+
+  .erp-modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-modal-photo {
+    width: 72px;
+    height: 72px;
+    font-size: 1.1rem;
+  }
+
+  .erp-student-row {
+    padding: 0.72rem 0.78rem;
+  }
+
+  .erp-attendance-day,
+  .erp-attendance-day-empty {
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .erp-dashboard-content {
+    padding-top: 1.25rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .erp-overview-card {
+    border-radius: 1rem;
+  }
+
+  .erp-attendance-report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .erp-form-section {
+    padding: 0.9rem;
+  }
+
+  .erp-leave-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .erp-marksheet-page,
+  .erp-marksheet-layout,
+  .erp-marksheet-preview {
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+
+  .erp-marksheet-paper {
+    max-width: 100%;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+  }
+}
+
+/* Premium Balanced Theme Override */
+:root {
+  --erp-bg-base: #0f172a;
+  --erp-surface: rgba(255, 255, 255, 0.92);
+  --erp-surface-soft: rgba(248, 250, 252, 0.9);
+  --erp-border: #dbeafe;
+  --erp-text-strong: #0f172a;
+  --erp-text-muted: #475569;
+  --erp-primary: #0891b2;
+  --erp-primary-soft: #cffafe;
+}
+
+body {
+  background:
+    radial-gradient(circle at 8% 8%, rgba(34, 211, 238, 0.18), transparent 32%),
+    radial-gradient(circle at 92% 12%, rgba(56, 189, 248, 0.14), transparent 34%),
+    linear-gradient(160deg, #020617 0%, #0f172a 58%, #082f49 100%);
+  color: #e2e8f0;
+}
+
+.erp-dashboard-header {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+}
+
+.erp-dashboard-kicker {
+  color: #0e7490;
+}
+
+.erp-dashboard-title {
+  color: #0f172a;
+}
+
+.erp-nav-button {
+  border-color: #cbd5e1;
+  color: #0f172a;
+  background: linear-gradient(120deg, #ffffff, #f0f9ff);
+}
+
+.erp-nav-button:hover {
+  background: linear-gradient(120deg, #0f766e, #0891b2);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 10px 22px rgba(8, 145, 178, 0.24);
+}
+
+.erp-form-section,
+.erp-hero-panel,
+.erp-overview-card,
+.erp-class-card,
+.erp-student-row,
+.erp-student-profile-card,
+.erp-student-compact-card,
+.erp-fees-kpi-card,
+.erp-fees-sidebar,
+.erp-modal-card,
+.erp-marksheet-editor,
+.erp-marksheet-paper,
+.erp-guide-feature,
+.erp-fees-access-card,
+.erp-fees-ledger-item,
+.erp-notice-preview-card {
+  border-color: #dbeafe;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 14px 30px rgba(2, 6, 23, 0.16);
+  backdrop-filter: blur(10px);
+}
+
+.erp-form-title,
+.erp-modal-card-title,
+.erp-student-name,
+.erp-attendance-right-title,
+.erp-overview-title,
+.erp-overview-value,
+.erp-fees-kpi-card strong,
+.erp-class-label,
+.erp-student-compact-name,
+.erp-modal-name {
+  color: #0f172a;
+}
+
+.erp-student-meta,
+.erp-overview-note,
+.erp-form-field span,
+.erp-fees-kpi-card p {
+  color: #475569;
+}
+
+.erp-hero-main,
+.erp-guide-hero {
+  border-color: rgba(103, 232, 249, 0.48);
+  background:
+    linear-gradient(120deg, rgba(2, 6, 23, 0.92), rgba(8, 47, 73, 0.88)),
+    radial-gradient(circle at 80% 10%, rgba(34, 211, 238, 0.18), transparent 35%);
+}
+
+.erp-fees-shell,
+.erp-add-student-page,
+.erp-dashboard-shell,
+.erp-marksheet-page {
+  background:
+    radial-gradient(circle at 0 0, rgba(6, 182, 212, 0.14), transparent 34%),
+    radial-gradient(circle at 100% 0, rgba(8, 145, 178, 0.12), transparent 36%),
+    linear-gradient(160deg, #020617 0%, #0f172a 56%, #082f49 100%);
+}
+
+.erp-fees-side-btn {
+  border-color: #bae6fd;
+  background: #ecfeff;
+  color: #155e75;
+}
+
+.erp-fees-side-btn-active {
+  background: linear-gradient(120deg, #0f766e, #0891b2);
+  color: #ffffff;
+}
+
+.erp-fees-role-badge,
+.erp-session-pill,
+.erp-attendance-quick-btn {
+  border-color: #a5f3fc;
+  background: #ecfeff;
+  color: #0f766e;
+}
+
+.erp-fees-kpi-card {
+  border-left-color: #0891b2;
+}
+
+.erp-form-field input,
+.erp-form-field textarea,
+.erp-fees-native-select,
+.erp-marksheet-subject-table input {
+  border-color: #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.erp-form-field input::placeholder,
+.erp-form-field textarea::placeholder {
+  color: #94a3b8;
+}
+
+.erp-form-field input:focus,
+.erp-form-field textarea:focus,
+.erp-fees-native-select:focus {
+  outline: 3px solid rgba(34, 211, 238, 0.18);
+  border-color: #0891b2;
+}
+
+.erp-custom-select-trigger {
+  border: 1.5px solid #bae6fd;
+  border-radius: 0.95rem;
+  background: rgba(236, 254, 255, 0.75);
+  color: #0f172a;
+  box-shadow: 0 6px 14px rgba(14, 116, 144, 0.08);
+}
+
+.erp-custom-select-trigger:hover {
+  border-color: #22d3ee;
+  background: #ffffff;
+}
+
+.erp-custom-select-open {
+  border-color: #0891b2 !important;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2), 0 14px 28px rgba(8, 47, 73, 0.12);
+}
+
+.erp-custom-select-value {
+  color: #0f172a;
+}
+
+.erp-custom-select-placeholder {
+  color: #64748b;
+}
+
+.erp-custom-select-chevron {
+  color: #0e7490;
+}
+
+.erp-custom-select-menu {
+  border-color: #bae6fd;
+  background: #ffffff;
+  box-shadow: 0 16px 36px -20px rgba(8, 47, 73, 0.55);
+  border-radius: 0.95rem;
+  padding: 0.35rem;
+}
+
+.erp-custom-select-item {
+  color: #0f172a;
+  border-radius: 0.75rem;
+  font-weight: 600;
+}
+
+.erp-custom-select-item:hover {
+  background: #ecfeff;
+  color: #0f172a;
+}
+
+.erp-custom-select-item-active {
+  background: #0e7490;
+  color: #ffffff;
+}
+
+.erp-fees-table th,
+.erp-fees-table td,
+.erp-marksheet-table th,
+.erp-marksheet-table td,
+.erp-marksheet-subject-table th,
+.erp-marksheet-subject-table td {
+  border-color: #dbeafe;
+  color: #0f172a;
+}
+
+.erp-fees-table thead tr,
+.erp-marksheet-table thead tr,
+.erp-marksheet-subject-table thead tr {
+  background: #f1f5f9;
+}
+
+.erp-notice-status,
+.erp-marksheet-send-status {
+  border-color: #a5f3fc;
+  background: #ecfeff;
+  color: #0f766e;
+}
+
+.erp-form-primary-button {
+  background: linear-gradient(120deg, #0f766e, #0891b2);
+  box-shadow: 0 12px 22px rgba(8, 145, 178, 0.26);
+}
+
+.login-switch-container {
+  background: linear-gradient(120deg, #ecfeff, #eef2ff);
+  box-shadow: inset 0 0 0 1px #bae6fd;
+}
+
+.login-switch-container-simple {
+  background: #cffafe;
+}
+
+.login-switch-label {
+  color: #0f172a;
+}
+
+/* Add Student: balanced glassmorphism override */
+.erp-add-student-page {
+  background:
+    radial-gradient(circle at 6% 12%, rgba(125, 211, 252, 0.25), transparent 36%),
+    radial-gradient(circle at 92% 10%, rgba(167, 243, 208, 0.24), transparent 34%),
+    linear-gradient(165deg, #eef8ff 0%, #e8f5ff 46%, #f4fbff 100%);
+}
+
+.erp-add-student-page .erp-add-student-header {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.76));
+  backdrop-filter: blur(10px);
+}
+
+.erp-add-student-page .erp-form-shell {
+  gap: 1.1rem;
+}
+
+.erp-add-student-page .erp-form-section {
+  border: 1px solid rgba(186, 230, 253, 0.5);
+  border-top: 3px solid rgba(56, 189, 248, 0.7);
+  border-radius: 1.1rem;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.9), rgba(240, 249, 255, 0.76));
+  box-shadow:
+    0 14px 26px rgba(15, 23, 42, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(9px);
+}
+
+.erp-add-student-page .erp-form-title {
+  color: #0f172a;
+  letter-spacing: 0.08em;
+}
+
+.erp-add-student-page .erp-form-field span {
+  color: #334155;
+  font-weight: 700;
+}
+
+.erp-add-student-page .erp-form-field input,
+.erp-add-student-page .erp-form-field textarea,
+.erp-add-student-page .erp-fees-native-select {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.9));
+  color: #0f172a;
+}
+
+.erp-add-student-page .erp-form-field input:focus,
+.erp-add-student-page .erp-form-field textarea:focus,
+.erp-add-student-page .erp-fees-native-select:focus {
+  outline: 3px solid rgba(56, 189, 248, 0.2);
+  border-color: #0ea5e9;
+}
+
+.erp-add-student-page .erp-form-quick-note {
+  border: 1px solid rgba(186, 230, 253, 0.65);
+  background: linear-gradient(130deg, rgba(239, 246, 255, 0.9), rgba(236, 254, 255, 0.85));
+  color: #0f766e;
+  backdrop-filter: blur(8px);
+}
+
+.erp-add-student-page .erp-student-photo-preview-wrap {
+  border: 1px dashed rgba(14, 165, 233, 0.65);
+  background: linear-gradient(145deg, rgba(240, 249, 255, 0.9), rgba(236, 254, 255, 0.82));
+}
+
+.erp-add-student-page .erp-form-actions-sticky {
+  border: 1px solid rgba(186, 230, 253, 0.55);
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.92), rgba(240, 249, 255, 0.86));
+  backdrop-filter: blur(9px);
+}
+
+.erp-add-student-page .erp-form-primary-button {
+  border-radius: 0.8rem;
+  background: linear-gradient(120deg, #0284c7, #0f766e);
+  box-shadow: 0 12px 24px rgba(2, 132, 199, 0.24);
+}
+
+.erp-add-student-page .erp-form-primary-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.erp-add-student-page .erp-custom-select-trigger {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.9));
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+}
+
+.erp-add-student-page .erp-custom-select-open {
+  border-color: #0ea5e9 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2), 0 12px 22px rgba(15, 23, 42, 0.1);
+}
+
+.erp-add-student-page .erp-custom-select-item-active {
+  background: #0284c7;
+}
+
