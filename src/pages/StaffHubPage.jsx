@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import CustomSelect from './CustomSelect'
+import { useNavigate } from 'react-router-dom'
+import CustomSelect from '../components/CustomSelect'
+import { useAppContext } from '../context/AppContext'
 
 const navItems = [
   { id: 'dashboard', label: 'Staff Dashboard' },
@@ -134,7 +136,11 @@ const buildAvatarDataUri = (name) => {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }
 
-function StaffHubPage({ staff = [], onBack, onAddStaff }) {
+function StaffHubPage() {
+  const navigate = useNavigate()
+  const { staffRecords: staff = [], addStaff: ctxAddStaff } = useAppContext()
+  const onBack = () => navigate('/dashboard')
+  const onAddStaff = ctxAddStaff || (() => { })
   const [activeView, setActiveView] = useState('dashboard')
   const [searchText, setSearchText] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -569,9 +575,10 @@ function StaffHubPage({ staff = [], onBack, onAddStaff }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="relative min-h-screen overflow-hidden bg-[#020617] text-slate-800"
+      className="relative min-h-screen overflow-hidden bg-white text-slate-800"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(56,189,248,0.35),transparent_45%),radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.24),transparent_35%),radial-gradient(circle_at_50%_100%,rgba(14,165,233,0.3),transparent_45%)]" />
+
+
 
       <div className="relative mx-auto max-w-[1400px] px-4 py-6 lg:px-8">
         <header className="mb-4 rounded-2xl border border-white/20 bg-white/85 p-4 shadow-xl backdrop-blur md:p-5">
@@ -592,7 +599,7 @@ function StaffHubPage({ staff = [], onBack, onAddStaff }) {
         <div className="grid gap-4 xl:grid-cols-[260px_1fr]">
           <aside className="rounded-2xl border border-cyan-200/30 bg-white/80 p-4 text-white shadow-2xl backdrop-blur">
             <div className="mb-4 rounded-xl border border-white/10 bg-white/10 p-3">
-              <p className="text-xs uppercase tracking-widest text-cyan-200">Institution</p>
+              <p className="text-xs uppercase tracking-widest text-blue-600">Institution</p>
               <h2 className="mt-1 text-lg font-semibold">School ERP</h2>
               <p className="text-xs text-slate-300">Staff & HR Command</p>
             </div>
@@ -602,9 +609,8 @@ function StaffHubPage({ staff = [], onBack, onAddStaff }) {
                   key={item.id}
                   type="button"
                   onClick={() => setActiveView(item.id)}
-                  className={`w-full rounded-lg px-3 py-2 text-left text-sm transition ${
-                    activeView === item.id ? 'bg-cyan-400 text-slate-900 font-semibold' : 'bg-white/10 text-slate-800 hover:bg-white/20'
-                  }`}
+                  className={`w-full rounded-lg px-3 py-2 text-left text-sm transition ${activeView === item.id ? 'bg-cyan-400 text-slate-900 font-semibold' : 'bg-white/10 text-slate-800 hover:bg-white/20'
+                    }`}
                 >
                   {item.label}
                 </button>

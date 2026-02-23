@@ -391,17 +391,17 @@ function DashboardPage({
       className="min-h-screen bg-slate-100 text-slate-800"
     >
       <div className="mx-auto flex min-h-screen max-w-[1560px] gap-4 p-4">
-        <aside className={`rounded-2xl bg-slate-900 text-slate-100 shadow-2xl transition-all ${sidebarCollapsed ? 'w-20 p-3' : 'w-72 p-4'} hidden md:block`}>
+        <aside className={`rounded-2xl bg-white text-slate-800 shadow-2xl transition-all ${sidebarCollapsed ? 'w-20 p-3' : 'w-72 p-4'} hidden md:block`}>
           <div className="mb-5 flex items-center justify-between">
             {!sidebarCollapsed ? (
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">School ERP</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-blue-600">School ERP</p>
                 <h2 className="text-lg font-semibold">Control Panel</h2>
               </div>
             ) : null}
             <button
               type="button"
-              className="rounded-lg bg-slate-800 p-2 text-cyan-300 hover:bg-slate-700"
+              className="rounded-lg bg-slate-100 p-2 text-blue-600 hover:bg-slate-200"
               onClick={() => setSidebarCollapsed((prev) => !prev)}
               aria-label="Toggle sidebar"
             >
@@ -418,7 +418,7 @@ function DashboardPage({
                   <button
                     type="button"
                     className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm transition ${
-                      activeMenu === item.id ? 'bg-cyan-500 text-slate-950 font-semibold' : 'bg-slate-800/70 text-slate-200 hover:bg-slate-700'
+                      activeMenu === item.id ? 'bg-cyan-500 text-slate-950 font-semibold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                     onClick={() => {
                       setActiveMenu(item.id)
@@ -438,8 +438,8 @@ function DashboardPage({
                     ) : null}
                   </button>
                   {isAttendanceMenuOpen && !sidebarCollapsed ? (
-                    <div className="mt-1 rounded-lg border border-slate-700 bg-slate-800 p-1">
-                      <div className="space-y-2 rounded-md border border-slate-700 bg-slate-900/70 p-2">
+                    <div className="mt-1 rounded-lg border border-slate-200 bg-slate-100 p-1">
+                      <div className="space-y-2 rounded-md border border-slate-200 bg-white/70 p-2">
                         <p className="text-[11px] font-semibold uppercase tracking-wide text-cyan-200">Attendance Type</p>
                         <button
                           type="button"
@@ -453,7 +453,7 @@ function DashboardPage({
                         </button>
                         <button
                           type="button"
-                          className="block w-full rounded-md bg-slate-700 px-2 py-1.5 text-left text-xs font-semibold text-slate-100 hover:bg-slate-600"
+                          className="block w-full rounded-md bg-slate-700 px-2 py-1.5 text-left text-xs font-semibold text-slate-800 hover:bg-slate-600"
                           onClick={() => {
                             setIsAttendanceMenuOpen(false)
                             onOpenTeacherAttendance?.()
@@ -470,7 +470,7 @@ function DashboardPage({
                   key={item.id}
                   type="button"
                   className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${
-                    activeMenu === item.id ? 'bg-cyan-500 text-slate-950 font-semibold' : 'bg-slate-800/70 text-slate-200 hover:bg-slate-700'
+                    activeMenu === item.id ? 'bg-cyan-500 text-slate-950 font-semibold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                   onClick={() => menuAction(item.id)}
                 >
