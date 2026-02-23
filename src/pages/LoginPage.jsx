@@ -159,8 +159,8 @@ function LoginPage() {
                               setFormError('')
                             }}
                             className={`flex w-full items-center gap-2 px-4 py-3 text-left text-sm font-medium transition ${selectedRole === role
-                                ? 'bg-cyan-700 text-white'
-                                : 'text-slate-800 hover:bg-cyan-50 hover:text-slate-900'
+                              ? 'bg-cyan-700 text-white'
+                              : 'text-slate-800 hover:bg-cyan-50 hover:text-slate-900'
                               }`}
                           >
                             <span>{roleIcons[role]}</span>
@@ -181,7 +181,7 @@ function LoginPage() {
               <input
                 type="email"
                 placeholder="Enter Gmail address"
-                className="login-input w-full text-sm text-slate-900 placeholder:text-slate-500/70"
+                className="w-full rounded-xl border border-cyan-200 bg-cyan-50/70 px-4 py-3 text-sm font-medium text-slate-900 outline-none transition hover:border-cyan-300 focus:border-cyan-600 focus:bg-white focus:ring-2 focus:ring-cyan-200 placeholder:text-slate-500/70"
                 value={email}
                 onChange={(event) => {
                   setEmail(event.target.value)
@@ -198,7 +198,7 @@ function LoginPage() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter password"
-                  className="login-input w-full pr-11 text-sm text-slate-900 placeholder:text-slate-500/70"
+                  className="w-full rounded-xl border border-cyan-200 bg-cyan-50/70 px-4 py-3 pr-11 text-sm font-medium text-slate-900 outline-none transition hover:border-cyan-300 focus:border-cyan-600 focus:bg-white focus:ring-2 focus:ring-cyan-200 placeholder:text-slate-500/70"
                   value={password}
                   onChange={(event) => {
                     setPassword(event.target.value)
@@ -229,11 +229,19 @@ function LoginPage() {
               </div>
             </label>
 
-            <div className="mt-4 flex justify-center">
-              <button type="submit" className="login-switch-button" aria-label="Login">
-                <span className="login-switch-container login-switch-container-simple">
-                  <span className="login-switch-label">Login</span>
+            <div className="mt-6">
+              <button
+                type="submit"
+                className="group relative flex w-full items-center justify-center overflow-hidden rounded-xl bg-cyan-700 px-4 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cyan-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+                aria-label="Login"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <span>Login</span>
+                  <svg className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
+                  </svg>
                 </span>
+                <span className="absolute inset-0 z-0 h-full w-full -translate-x-full bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
               </button>
             </div>
 
