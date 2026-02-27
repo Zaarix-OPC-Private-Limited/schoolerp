@@ -21,3 +21,14 @@ export const getTeachers = () =>
     request('/api/v1/teachers', {
         method: 'GET',
     })
+
+export const createClass = (classData) =>
+    request('/api/v1/classes', {
+        method: 'POST',
+        body: classData,
+    })
+
+export const getClasses = () =>
+    request('/api/v1/classes', {
+        method: 'GET',
+    })

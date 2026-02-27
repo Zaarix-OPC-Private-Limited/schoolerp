@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getMe, logout as apiLogout } from '../services/authApi'
-import { createStudent, createTeacher } from '../services/api'
+import { createStudent, createTeacher, getClasses, createClass, getStudents } from '../services/api'
 
 const APP_SESSION_KEY = 'erp_app_session_v1'
 
@@ -58,6 +58,29 @@ export function AppProvider({ children }) {
   const [staffRecords, setStaffRecords] = useState(defaultStaffRecords)
   const [incomeLedger, setIncomeLedger] = useState(defaultIncomeLedger)
   const [expenseLedger, setExpenseLedger] = useState(defaultExpenseLedger)
+  const [classRecords, setClassRecords] = useState([])
+
+  const fetchClasses = async () => {
+    try {
+      const response = await getClasses()
+      if (response?.data?.classes) {
+        setClassRecords(response.data.classes)
+      }
+    } catch (error) {
+      console.error('Failed to fetch classes:', error)
+    }
+  }
+
+  const fetchStudents = async () => {
+    try {
+      const response = await getStudents()
+      if (response?.data?.students) {
+        setStudentRecords(response.data.students)
+      }
+    } catch (error) {
+      console.error('Failed to fetch students:', error)
+    }
+  }
 
   // Intent state for cross-page navigation hints
   const [marksheetIntent, setMarksheetIntent] = useState(null)
@@ -80,6 +103,9 @@ export function AppProvider({ children }) {
           setLoggedInRole(String(user?.role || ''))
           setLoggedInEmail(String(user?.email || ''))
           setIsLoggedIn(true)
+          if (isMounted) {
+            await Promise.all([fetchClasses(), fetchStudents()])
+          }
         }
       } catch (error) {
         if (isMounted) {
@@ -118,6 +144,8 @@ export function AppProvider({ children }) {
     setLoggedInRole(String(user?.role || ''))
     setLoggedInEmail(String(user?.email || ''))
     setIsLoggedIn(true)
+    fetchClasses()
+    fetchStudents()
   }
 
   const handleLogout = async () => {
@@ -136,6 +164,8 @@ export function AppProvider({ children }) {
       setTeacherHubIntent(null)
       setAttendanceIntent(null)
       setTeacherAttendanceIntent(null)
+      setClassRecords([])
+      setStudentRecords([])
     }
   }
 
@@ -183,6 +213,20 @@ export function AppProvider({ children }) {
     }
   }
 
+  const addClass = async (classData) => {
+    try {
+      const response = await createClass(classData)
+      if (response?.data?.class) {
+        setClassRecords((prev) => [...prev, response.data.class])
+        return response.data.class
+      }
+      return null
+    } catch (error) {
+      console.error('Failed to create class:', error)
+      throw error
+    }
+  }
+
   const addStaff = (staffMember) => {
     setStaffRecords((prev) => [staffMember, ...prev])
   }
@@ -220,6 +264,9 @@ export function AppProvider({ children }) {
         updateTeacher,
         addTeacher,
         addStaff,
+        classRecords,
+        fetchClasses,
+        addClass,
         isAuthLoading,
       }}
     >

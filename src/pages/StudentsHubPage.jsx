@@ -78,46 +78,12 @@ const getClassLabel = (value) => classLabelMap[value] || value
 const toMonthPrefix = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
 const STUDENTS_PER_PAGE = 8
 
-const ensureSixthClassDemoStudents = (records) => {
-  const targetClass = '6th'
-  const classStudents = records.filter((item) => item.className === targetClass)
-  if (classStudents.length >= 30) return records
 
-  const needed = 30 - classStudents.length
-  const teacherName = classStudents[0]?.classTeacherName || 'Priya Sharma'
-  const template = classStudents[0] || null
-  const existingIds = new Set(records.map((item) => item.id))
-  const extras = []
-
-  for (let index = 0; index < needed; index += 1) {
-    const serial = classStudents.length + index + 1
-    const id = `DUMMY-6TH-${String(serial).padStart(3, '0')}`
-    if (existingIds.has(id)) continue
-    extras.push({
-      ...(template || {}),
-      id,
-      name: `Demo Student ${serial}`,
-      className: targetClass,
-      section: String.fromCharCode(65 + (serial % 3)),
-      rollNumber: String(serial).padStart(3, '0'),
-      classTeacherName: teacherName,
-      fatherName: `Father ${serial}`,
-      fatherContact: `0000${String(100000 + serial).slice(-6)}`,
-      contactNumber: `0000${String(100000 + serial).slice(-6)}`,
-      studentStatus: 'Active',
-      attendancePercent: `${85 + (serial % 10)}%`,
-      feeStatus: serial % 2 === 0 ? 'Paid' : 'Pending',
-      photoPreview: '',
-    })
-  }
-
-  return [...records, ...extras]
-}
 
 function StudentsHubPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { studentRecords: students = [], updateStudent: onUpdateStudent } = useAppContext()
+  const { studentRecords: students = [], updateStudent: onUpdateStudent, addClass, classRecords } = useAppContext()
   const navigationIntent = location.state || null
   const onNavigationHandled = () => window.history.replaceState({}, '')
   const onAddStudent = () => navigate('/students/add')
@@ -140,17 +106,14 @@ function StudentsHubPage() {
   const [leaveRequests, setLeaveRequests] = useState(() => defaultLeaveRequests.filter((item) => item.requesterType === 'student'))
   const [currentPage, setCurrentPage] = useState(1)
 
+  const [showAddClassModal, setShowAddClassModal] = useState(false)
+  const [newClassName, setNewClassName] = useState('')
+  const [newClassSection, setNewClassSection] = useState('')
+  const [isAddingClass, setIsAddingClass] = useState(false)
+
   const records = useMemo(() => {
     const withEdits = (list) => list.map((item) => (studentEdits[item.id] ? { ...item, ...studentEdits[item.id] } : item))
-    if (students.length) return withEdits(ensureSixthClassDemoStudents(students.map(normalizeStudent)))
-    const seededByClass = buildStudentsByClass([], {})
-    return withEdits(
-      ensureSixthClassDemoStudents(
-        Object.values(seededByClass)
-          .flat()
-          .map(normalizeStudent),
-      ),
-    )
+    return withEdits(students.map(normalizeStudent))
   }, [studentEdits, students])
 
   const studentsByClass = useMemo(
@@ -163,24 +126,24 @@ function StudentsHubPage() {
     [records],
   )
 
-  const classCards = useMemo(
-    () =>
-      Object.entries(studentsByClass)
-        .map(([className, classStudents]) => ({
-          className,
-          count: classStudents.length,
-          teacher: classStudents[0]?.classTeacherName || 'N/A',
-        }))
-        .sort((a, b) => {
-          const aIndex = classNames.indexOf(a.className)
-          const bIndex = classNames.indexOf(b.className)
-          if (aIndex === -1 && bIndex === -1) return a.className.localeCompare(b.className, undefined, { numeric: true })
-          if (aIndex === -1) return 1
-          if (bIndex === -1) return -1
-          return aIndex - bIndex
-        }),
-    [studentsByClass],
-  )
+  const classCards = useMemo(() => {
+    return (classRecords || []).map((dbClass) => {
+      const displayClassName = `${dbClass.name} - ${dbClass.section}`
+      const stds = studentsByClass[displayClassName] || []
+
+      const teacherName = dbClass.classTeacherId?.name
+        || stds[0]?.classTeacherName
+        || 'Unassigned'
+
+      return {
+        className: displayClassName,
+        baseName: dbClass.name,
+        section: dbClass.section,
+        count: stds.length,
+        teacher: teacherName,
+      }
+    })
+  }, [classRecords, studentsByClass])
 
   const classStudents = useMemo(() => (selectedClass ? studentsByClass[selectedClass] || [] : []), [studentsByClass, selectedClass])
 
@@ -471,14 +434,83 @@ function StudentsHubPage() {
     ]
   }, [profileStudent])
 
+  const handleAddClassSubmit = async () => {
+    if (!newClassName.trim() || !newClassSection.trim()) {
+      alert("Please enter both Class Name and Section");
+      return;
+    }
+    setIsAddingClass(true);
+    try {
+      await addClass({ name: newClassName, section: newClassSection });
+      setShowAddClassModal(false);
+      setNewClassName("");
+      setNewClassSection("");
+      alert("Class added successfully!");
+    } catch (err) {
+      alert("Failed to add class. Ensure name and section are valid and unique.");
+    } finally {
+      setIsAddingClass(false);
+    }
+  };
+
   return (
     <motion.section
       key="students-hub-page"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="min-h-screen bg-white text-slate-800"
+      className="min-h-screen bg-white text-slate-800 relative"
     >
+      {/* ADD CLASS MODAL */}
+      {showAddClassModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl"
+          >
+            <h3 className="mb-4 text-lg font-bold text-slate-800">Add New Class</h3>
+            <div className="space-y-4">
+              <label className="flex flex-col gap-2">
+                <span className="text-sm font-semibold text-slate-700">Class Name (e.g. 1st)</span>
+                <input
+                  value={newClassName}
+                  onChange={(e) => setNewClassName(e.target.value)}
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 transition-colors placeholder:text-slate-400 hover:border-slate-400 focus:border-cyan-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-cyan-500/10"
+                  placeholder="1st"
+                />
+              </label>
+              <label className="flex flex-col gap-2">
+                <span className="text-sm font-semibold text-slate-700">Section (e.g. A)</span>
+                <input
+                  value={newClassSection}
+                  onChange={(e) => setNewClassSection(e.target.value)}
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 transition-colors placeholder:text-slate-400 hover:border-slate-400 focus:border-cyan-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-cyan-500/10"
+                  placeholder="A"
+                />
+              </label>
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowAddClassModal(false)}
+                className="rounded-lg px-4 py-2 font-semibold text-slate-600 hover:bg-slate-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleAddClassSubmit}
+                disabled={isAddingClass}
+                className="rounded-lg bg-cyan-600 px-4 py-2 font-bold text-white hover:bg-cyan-700 disabled:opacity-50"
+              >
+                {isAddingClass ? "Saving..." : "Save Class"}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       <div className="mx-auto max-w-7xl px-5 py-6 sm:px-8">
         <header className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -489,6 +521,9 @@ function StudentsHubPage() {
             <div className="flex flex-wrap gap-2">
               <button type="button" className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" onClick={() => navigate('/dashboard')}>
                 Back to Dashboard
+              </button>
+              <button type="button" className="rounded-lg border border-cyan-300 bg-cyan-50 px-3 py-2 text-sm font-bold text-cyan-700 hover:bg-cyan-100" onClick={() => setShowAddClassModal(true)}>
+                + Add Class
               </button>
               <button type="button" className="rounded-lg bg-cyan-600 px-3 py-2 text-sm font-medium text-white hover:bg-cyan-700" onClick={onAddStudent}>
                 Add Student
