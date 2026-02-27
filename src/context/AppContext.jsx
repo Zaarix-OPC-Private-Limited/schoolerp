@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getMe, logout as apiLogout } from '../services/authApi'
-import { createStudent, createTeacher, getClasses, createClass, getStudents } from '../services/api'
+import { createStudent, createTeacher, getClasses, createClass, getStudents, createStaff, getStaff, getTeachers } from '../services/api'
 
 const APP_SESSION_KEY = 'erp_app_session_v1'
 
@@ -55,7 +55,7 @@ export function AppProvider({ children }) {
   const [loggedInEmail, setLoggedInEmail] = useState('')
   const [studentRecords, setStudentRecords] = useState([])
   const [teacherRecords, setTeacherRecords] = useState([])
-  const [staffRecords, setStaffRecords] = useState(defaultStaffRecords)
+  const [staffRecords, setStaffRecords] = useState([])
   const [incomeLedger, setIncomeLedger] = useState(defaultIncomeLedger)
   const [expenseLedger, setExpenseLedger] = useState(defaultExpenseLedger)
   const [classRecords, setClassRecords] = useState([])
@@ -93,6 +93,17 @@ export function AppProvider({ children }) {
     }
   }
 
+  const fetchStaff = async () => {
+    try {
+      const response = await getStaff()
+      if (response?.data?.staff) {
+        setStaffRecords(response.data.staff)
+      }
+    } catch (error) {
+      console.error('Failed to fetch staff:', error)
+    }
+  }
+
   // Intent state for cross-page navigation hints
   const [marksheetIntent, setMarksheetIntent] = useState(null)
   const [noticeIntent, setNoticeIntent] = useState(null)
@@ -115,7 +126,7 @@ export function AppProvider({ children }) {
           setLoggedInEmail(String(user?.email || ''))
           setIsLoggedIn(true)
           if (isMounted) {
-            await Promise.all([fetchClasses(), fetchStudents(), fetchTeachers()])
+            await Promise.all([fetchClasses(), fetchStudents(), fetchTeachers(), fetchStaff()])
           }
         }
       } catch (error) {
@@ -158,6 +169,7 @@ export function AppProvider({ children }) {
     fetchClasses()
     fetchStudents()
     fetchTeachers()
+    fetchStaff()
   }
 
   const handleLogout = async () => {
@@ -179,6 +191,7 @@ export function AppProvider({ children }) {
       setClassRecords([])
       setStudentRecords([])
       setTeacherRecords([])
+      setStaffRecords([])
     }
   }
 
@@ -240,8 +253,18 @@ export function AppProvider({ children }) {
     }
   }
 
-  const addStaff = (staffMember) => {
-    setStaffRecords((prev) => [staffMember, ...prev])
+  const addStaff = async (staffMember) => {
+    try {
+      const response = await createStaff(staffMember)
+      if (response && response.data && response.data.staff) {
+        setStaffRecords((prev) => [response.data.staff, ...prev])
+      } else {
+        setStaffRecords((prev) => [staffMember, ...prev])
+      }
+    } catch (error) {
+      console.error('Failed to create staff:', error)
+      throw error
+    }
   }
 
   return (
@@ -280,6 +303,7 @@ export function AppProvider({ children }) {
         classRecords,
         fetchClasses,
         fetchTeachers,
+        fetchStaff,
         addClass,
         isAuthLoading,
       }}

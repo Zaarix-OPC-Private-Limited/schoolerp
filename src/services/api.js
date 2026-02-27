@@ -32,3 +32,14 @@ export const getClasses = () =>
     request('/api/v1/classes', {
         method: 'GET',
     })
+
+export const createStaff = (staffData) =>
+    request('/api/v1/staff', {
+        method: 'POST',
+        body: staffData,
+    })
+
+export const getStaff = () =>
+    request('/api/v1/staff', {
+        method: 'GET',
+    })

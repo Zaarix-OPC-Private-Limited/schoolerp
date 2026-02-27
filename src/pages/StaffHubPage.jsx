@@ -12,106 +12,7 @@ const navItems = [
   { id: 'leaves', label: 'Leave Approval' },
 ]
 
-const seedStaff = [
-  {
-    id: 'S01',
-    name: 'Rakesh Kumar',
-    role: 'Support Staff',
-    designation: 'Canteen Supervisor',
-    department: 'Canteen',
-    contact: '0000002101',
-    status: 'present',
-    employment: 'Active',
-    monthlyAttendance: 94,
-    basic: 32000,
-    deductions: 1800,
-    allowance: 2500,
-    leaveDays: 2,
-    emergencyContact: '0000003101',
-    email: 'rakesh.canteen@schoolmail.com',
-    joiningDate: '2023-04-10',
-    shift: 'Morning',
-    assignedArea: 'Main Canteen',
-    busRoute: 'N/A',
-    vehicleNumber: 'N/A',
-    transportHistory: [],
-  },
-  {
-    id: 'S02',
-    name: 'Pooja Jain',
-    role: 'Academic Support',
-    designation: 'Librarian',
-    department: 'Library',
-    contact: '0000002102',
-    status: 'present',
-    employment: 'Active',
-    monthlyAttendance: 96,
-    basic: 36000,
-    deductions: 1600,
-    allowance: 3000,
-    leaveDays: 1,
-    emergencyContact: '0000003102',
-    email: 'pooja.library@schoolmail.com',
-    joiningDate: '2022-06-18',
-    shift: 'Day',
-    assignedArea: 'Main Library',
-    busRoute: 'N/A',
-    vehicleNumber: 'N/A',
-    transportHistory: [],
-  },
-  {
-    id: 'S03',
-    name: 'Nitin Yadav',
-    role: 'Transport Staff',
-    designation: 'Bus Attendant',
-    department: 'Transport',
-    contact: '0000002103',
-    status: 'leave',
-    employment: 'Active',
-    monthlyAttendance: 88,
-    basic: 25000,
-    deductions: 900,
-    allowance: 1200,
-    leaveDays: 4,
-    emergencyContact: '0000003103',
-    email: 'nitin.transport@schoolmail.com',
-    joiningDate: '2024-01-15',
-    shift: 'Morning',
-    assignedArea: 'Transport Yard',
-    busRoute: 'Route-3',
-    vehicleNumber: 'DL1PC7781',
-    transportHistory: [
-      { id: 'TR-001', period: '2025-04 to 2025-09', route: 'Route-2', vehicle: 'DL1PC6651', shift: 'Morning', remarks: 'Regular duty completed' },
-      { id: 'TR-002', period: '2025-10 to Present', route: 'Route-3', vehicle: 'DL1PC7781', shift: 'Morning', remarks: 'Current assignment' },
-    ],
-  },
-  {
-    id: 'S04',
-    name: 'Renu Singh',
-    role: 'Transport Staff',
-    designation: 'Transport Coordinator',
-    department: 'Transport',
-    contact: '0000002104',
-    status: 'present',
-    employment: 'Active',
-    monthlyAttendance: 91,
-    basic: 42000,
-    deductions: 2100,
-    allowance: 3500,
-    leaveDays: 2,
-    emergencyContact: '0000003104',
-    email: 'renu.transport@schoolmail.com',
-    joiningDate: '2021-09-20',
-    shift: 'Day',
-    assignedArea: 'Transport Office',
-    busRoute: 'All Routes',
-    vehicleNumber: 'N/A',
-    transportHistory: [
-      { id: 'TR-101', period: '2024-01 to 2024-12', route: 'Route-1, Route-4', vehicle: 'Multiple', shift: 'Day', remarks: 'Route planning and supervision' },
-      { id: 'TR-102', period: '2025-01 to Present', route: 'All Routes', vehicle: 'Multiple', shift: 'Day', remarks: 'Transport coordination lead' },
-    ],
-  },
-]
+// Seed staff removed to use real data from AppContext
 
 const statusOptions = [
   { value: 'all', label: 'All Status' },
@@ -162,30 +63,24 @@ function StaffHubPage() {
   const [generatedPayslip, setGeneratedPayslip] = useState('')
   const [generatedPayslipKey, setGeneratedPayslipKey] = useState('')
 
-  const [records, setRecords] = useState(() => {
-    if (!staff.length) {
-      return seedStaff.map((item) => ({
-        ...item,
-        photoPreview: item.photoPreview || buildAvatarDataUri(item.name),
-      }))
-    }
+  const records = useMemo(() => {
     return staff.map((member, index) => ({
-      id: member.id || `S${String(index + 1).padStart(2, '0')}`,
+      id: member.employeeId || member.id || `S${String(index + 1).padStart(2, '0')}`,
       name: member.name || 'Staff',
       role: member.role || 'Support Staff',
       designation: member.designation || member.role || 'Staff Member',
       department: member.department ? member.department[0].toUpperCase() + member.department.slice(1) : 'Admin',
-      contact: member.contactNumber || 'N/A',
-      status: member.status === 'on_leave' ? 'leave' : member.status === 'active' ? 'present' : 'absent',
+      contact: member.contactNumber || member.contact || 'N/A',
+      status: member.status === 'on_leave' ? 'leave' : member.status === 'active' ? 'present' : (member.status === 'present' ? 'present' : 'absent'),
       employment: member.status === 'inactive' ? 'Inactive' : 'Active',
       monthlyAttendance: member.monthlyAttendance || 90,
-      basic: member.basic || 30000,
+      basic: member.basicSalary || member.basic || 30000,
       deductions: member.deductions || 1000,
       allowance: member.allowance || 1500,
       leaveDays: member.leaveDays || 2,
       emergencyContact: member.emergencyContactNumber || member.emergencyContact || 'N/A',
       email: member.email || 'N/A',
-      joiningDate: member.joiningDate || 'N/A',
+      joiningDate: member.joiningDate ? new Date(member.joiningDate).toLocaleDateString() : 'N/A',
       shift: member.shift ? member.shift[0].toUpperCase() + member.shift.slice(1) : 'Day',
       assignedArea: member.assignedArea || 'N/A',
       busRoute: member.busRoute || 'N/A',
@@ -193,7 +88,7 @@ function StaffHubPage() {
       transportHistory: Array.isArray(member.transportHistory) ? member.transportHistory : [],
       photoPreview: member.photoPreview || buildAvatarDataUri(member.name || 'Staff'),
     }))
-  })
+  }, [staff])
 
   const [leaveRequests, setLeaveRequests] = useState(() => [
     { id: 'SL-001', staffId: records[0]?.id || 'S01', name: records[0]?.name || 'Staff', from: '2026-02-21', to: '2026-02-22', reason: 'Medical', status: 'pending' },
@@ -325,7 +220,7 @@ function StaffHubPage() {
     setLeaveRequests((prev) => prev.map((item) => (item.id === leaveId ? { ...item, status: decision } : item)))
     const current = leaveRequests.find((item) => item.id === leaveId)
     if (decision === 'approved' && current) {
-      setRecords((prev) => prev.map((item) => (item.id === current.staffId ? { ...item, status: 'leave' } : item)))
+      // Local updates removed since state is derived from context
     }
     setStatusMessage(`Leave request ${leaveId} ${decision}.`)
   }
@@ -463,14 +358,14 @@ function StaffHubPage() {
     setIsProfilePopupOpen(true)
   }
 
-  const handleAddStaffSubmit = (event) => {
+  const handleAddStaffSubmit = async (event) => {
     event.preventDefault()
     const name = newStaff.name.trim()
     const role = newStaff.role.trim()
     const designation = newStaff.designation.trim()
     const department = newStaff.department.trim()
     const contact = newStaff.contact.trim()
-    const basic = Number.parseFloat(newStaff.salary || '0')
+    const basicSalary = Number.parseFloat(newStaff.salary || '0')
     const allowance = Number.parseFloat(newStaff.allowance || '0')
 
     if (!name || !role || !designation || !department || !contact) {
@@ -478,79 +373,35 @@ function StaffHubPage() {
       return
     }
 
-    const maxStaffNumber = records.reduce((maxValue, item) => {
-      const parsed = Number.parseInt(String(item.id || '').replace(/\D+/g, ''), 10)
-      if (!Number.isFinite(parsed)) return maxValue
-      return Math.max(maxValue, parsed)
-    }, 0)
-    const nextId = `S${String(maxStaffNumber + 1).padStart(2, '0')}`
-    const nextRecord = {
-      id: nextId,
-      name,
-      role,
-      designation,
-      department,
-      contact,
-      status: 'present',
-      employment: 'Active',
-      monthlyAttendance: 90,
-      basic: Number.isFinite(basic) && basic > 0 ? basic : 30000,
-      deductions: 1000,
-      allowance: Number.isFinite(allowance) && allowance >= 0 ? allowance : 1500,
-      leaveDays: 0,
-      emergencyContact: 'N/A',
-      email: 'N/A',
-      joiningDate: new Date().toISOString().slice(0, 10),
-      shift: 'Day',
-      assignedArea: 'N/A',
-      busRoute: 'N/A',
-      vehicleNumber: 'N/A',
-      transportHistory: [],
-      photoPreview: newStaff.photoPreview || buildAvatarDataUri(name),
-    }
+    try {
+      setStatusMessage('Saving staff member...')
+      await onAddStaff({
+        name,
+        role,
+        designation,
+        department,
+        contactNumber: contact,
+        basicSalary,
+        allowance,
+        photoPreview: newStaff.photoPreview,
+      })
 
-    setRecords((prev) => [nextRecord, ...prev])
-    onAddStaff?.({
-      id: nextRecord.id,
-      employeeId: nextRecord.id,
-      name: nextRecord.name,
-      role: nextRecord.role,
-      department: nextRecord.department.toLowerCase(),
-      contactNumber: nextRecord.contact,
-      email: 'N/A',
-      joiningDate: new Date().toISOString().slice(0, 10),
-      address: 'N/A',
-      emergencyContactName: 'N/A',
-      emergencyContactNumber: 'N/A',
-      shift: 'day',
-      assignedArea: 'N/A',
-      busRoute: 'N/A',
-      vehicleNumber: 'N/A',
-      qualification: 'N/A',
-      status: 'active',
-      documentsStatus: 'Pending Verification',
-      designation: nextRecord.designation,
-      basic: nextRecord.basic,
-      deductions: nextRecord.deductions,
-      allowance: nextRecord.allowance,
-      leaveDays: nextRecord.leaveDays,
-      monthlyAttendance: nextRecord.monthlyAttendance,
-      photoPreview: nextRecord.photoPreview,
-    })
-    setSelectedStaffId(nextRecord.id)
-    setActiveView('staff')
-    setIsAddStaffOpen(false)
-    setNewStaff({
-      name: '',
-      role: '',
-      designation: '',
-      department: '',
-      contact: '',
-      salary: '',
-      allowance: '',
-      photoPreview: '',
-    })
-    setStatusMessage(`New staff added: ${nextRecord.name} (${nextRecord.id}).`)
+      setActiveView('staff')
+      setIsAddStaffOpen(false)
+      setNewStaff({
+        name: '',
+        role: '',
+        designation: '',
+        department: '',
+        contact: '',
+        salary: '',
+        allowance: '',
+        photoPreview: '',
+      })
+      setStatusMessage(`New staff added: ${name}.`)
+    } catch (error) {
+      setStatusMessage(`Error: ${error.message || 'Failed to save staff'}`)
+    }
   }
 
   const handleStaffPhotoChange = (event) => {
