@@ -54,7 +54,7 @@ export function AppProvider({ children }) {
   const [loggedInRole, setLoggedInRole] = useState('')
   const [loggedInEmail, setLoggedInEmail] = useState('')
   const [studentRecords, setStudentRecords] = useState([])
-  const [teacherRecords, setTeacherRecords] = useState(defaultTeacherRecords)
+  const [teacherRecords, setTeacherRecords] = useState([])
   const [staffRecords, setStaffRecords] = useState(defaultStaffRecords)
   const [incomeLedger, setIncomeLedger] = useState(defaultIncomeLedger)
   const [expenseLedger, setExpenseLedger] = useState(defaultExpenseLedger)
@@ -82,6 +82,17 @@ export function AppProvider({ children }) {
     }
   }
 
+  const fetchTeachers = async () => {
+    try {
+      const response = await getTeachers()
+      if (response?.data?.teachers) {
+        setTeacherRecords(response.data.teachers)
+      }
+    } catch (error) {
+      console.error('Failed to fetch teachers:', error)
+    }
+  }
+
   // Intent state for cross-page navigation hints
   const [marksheetIntent, setMarksheetIntent] = useState(null)
   const [noticeIntent, setNoticeIntent] = useState(null)
@@ -104,7 +115,7 @@ export function AppProvider({ children }) {
           setLoggedInEmail(String(user?.email || ''))
           setIsLoggedIn(true)
           if (isMounted) {
-            await Promise.all([fetchClasses(), fetchStudents()])
+            await Promise.all([fetchClasses(), fetchStudents(), fetchTeachers()])
           }
         }
       } catch (error) {
@@ -146,6 +157,7 @@ export function AppProvider({ children }) {
     setIsLoggedIn(true)
     fetchClasses()
     fetchStudents()
+    fetchTeachers()
   }
 
   const handleLogout = async () => {
@@ -166,6 +178,7 @@ export function AppProvider({ children }) {
       setTeacherAttendanceIntent(null)
       setClassRecords([])
       setStudentRecords([])
+      setTeacherRecords([])
     }
   }
 
@@ -266,6 +279,7 @@ export function AppProvider({ children }) {
         addStaff,
         classRecords,
         fetchClasses,
+        fetchTeachers,
         addClass,
         isAuthLoading,
       }}

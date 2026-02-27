@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { baseTeachers, classNames, classTeacherByClass } from '../components/dashboard/constants'
 import { useAppContext } from '../context/AppContext'
 
 const classPayrollDefaults = {
@@ -85,7 +84,7 @@ const normalizePhone = (value) => String(value || '').replace(/\D/g, '')
 function TeacherHubPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { teacherRecords: teachers = [], updateTeacher: onUpdateTeacher } = useAppContext()
+  const { teacherRecords: teachers = [], classRecords = [], updateTeacher: onUpdateTeacher } = useAppContext()
   const navigationIntent = location.state || null
   const onNavigationHandled = () => window.history.replaceState({}, '')
   const onOpenNotice = (teacher) => navigate('/notices', { state: { source: 'teacher-profile', teacher } })
@@ -105,31 +104,29 @@ function TeacherHubPage() {
   const [generatedPayslipKey, setGeneratedPayslipKey] = useState('')
 
   const records = useMemo(() => {
-    const source = teachers.length ? teachers : baseTeachers
-    const normalized = source.map(normalizeTeacher)
+    const normalized = teachers.map((teacher, idx) => normalizeTeacher(teacher, idx))
     return normalized.map((item) => (teacherEdits[item.id] ? { ...item, ...teacherEdits[item.id] } : item))
   }, [teacherEdits, teachers])
 
-  const classOrder = useMemo(() => classNames, [])
+  const classOrder = useMemo(() => {
+    // If we have classRecords from DB, use them. Otherwise use unique classes from teachers.
+    if (classRecords.length) {
+      return classRecords.map(c => c.name)
+    }
+    return Array.from(new Set(records.map(r => r.classTeacherName).filter(name => name && name !== 'N/A')))
+  }, [classRecords, records])
 
   const teachersByClass = useMemo(() => {
     const mapped = {}
     classOrder.forEach((className) => {
-      const directTeachers = records.filter((teacher) => teacher.classTeacherName === className)
-      const byName = records.filter((teacher) => teacher.name === classTeacherByClass[className])
-      const merged = [...directTeachers, ...byName].reduce((acc, teacher) => {
-        if (acc.some((item) => item.id === teacher.id)) return acc
-        acc.push(teacher)
-        return acc
-      }, [])
-      mapped[className] = merged
+      mapped[className] = records.filter((teacher) => teacher.classTeacherName === className)
     })
     return mapped
   }, [classOrder, records])
 
   const extraClasses = useMemo(
     () =>
-      Array.from(new Set(records.map((item) => item.classTeacherName).filter(Boolean))).filter((item) => !classOrder.includes(item)),
+      Array.from(new Set(records.map((item) => item.classTeacherName).filter(Boolean))).filter((item) => item !== 'N/A' && !classOrder.includes(item)),
     [classOrder, records],
   )
 
@@ -137,11 +134,13 @@ function TeacherHubPage() {
     () =>
       [...classOrder, ...extraClasses].map((className) => {
         const classTeachers = teachersByClass[className] || records.filter((teacher) => teacher.classTeacherName === className)
+        // Try to find if any teacher is specifically mapped as Class Teacher in DB (if such field exists, otherwise use first)
+        const primaryTeacher = classTeachers[0]
         return {
           className,
           count: classTeachers.length,
-          classTeacher: classTeachers[0]?.name || classTeacherByClass[className] || 'Not Assigned',
-          section: classTeachers[0]?.classTeacherSection || 'A',
+          classTeacher: primaryTeacher?.name || 'Not Assigned',
+          section: primaryTeacher?.classTeacherSection || 'A',
           subjects: classTeachers.length ? Array.from(new Set(classTeachers.map((item) => item.subject).filter(Boolean))).join(', ') : 'Not Assigned',
         }
       }),

@@ -4,6 +4,15 @@ import { useNavigate } from 'react-router-dom'
 import CustomSelect from '../components/CustomSelect'
 import { useAppContext } from '../context/AppContext'
 
+const input = "w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 transition-colors placeholder:text-slate-400 hover:border-slate-400 focus:border-cyan-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-cyan-500/10";
+const textarea = "w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 transition-colors placeholder:text-slate-400 hover:border-slate-400 focus:border-cyan-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-cyan-500/10";
+const label = "flex flex-col gap-2";
+const labelText = "text-sm font-semibold text-slate-700";
+const grid = "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3";
+const section = "mb-10 border-b border-slate-100 pb-10 last:border-0 last:pb-0";
+const sectionTitle = "mb-6 text-lg font-bold tracking-tight text-slate-800 flex items-center gap-3 before:h-6 before:w-1.5 before:rounded-full before:bg-cyan-500";
+const submitBtn = "rounded-xl bg-cyan-600 px-8 py-3.5 font-bold text-white shadow-md transition-all hover:bg-cyan-700 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-cyan-500/30 active:translate-y-0";
+
 const genderOptions = [
   { value: 'male', label: 'Male' },
   { value: 'female', label: 'Female' },
@@ -47,10 +56,7 @@ const classLabelMap = {
   '12th': 'Twelfth',
 }
 
-const classOptions = ['Nursery', 'LKG', 'UKG', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'].map((item) => ({
-  value: item,
-  label: classLabelMap[item] || item,
-}))
+// classOptions moved inside component for dynamic classRecords support
 
 const sectionOptions = [
   { value: 'A', label: 'A' },
@@ -75,9 +81,21 @@ const generateEmployeeId = () => {
 
 function AddTeacherPage() {
   const navigate = useNavigate()
-  const { addTeacher } = useAppContext()
+  const { addTeacher, classRecords = [] } = useAppContext()
+
+  const dynamicClassOptions = useMemo(() => {
+    const options = [{ value: 'none', label: 'None' }]
+    const dbOptions = classRecords.map((cls) => ({
+      value: cls.name, // Or cls.id if you prefer, but name is used in model
+      label: `${cls.name} - ${cls.section}`,
+    }))
+    return [...options, ...dbOptions]
+  }, [classRecords])
   const [employeeId] = useState(generateEmployeeId)
   const [photoPreview, setPhotoPreview] = useState('')
+  const [qualCertPreview, setQualCertPreview] = useState('')
+  const [idProofPreview, setIdProofPreview] = useState('')
+  const [resumePreview, setResumePreview] = useState('')
   const [salary, setSalary] = useState('')
   const [allowance, setAllowance] = useState('')
   const [formError, setFormError] = useState('')
@@ -102,6 +120,19 @@ function AddTeacherPage() {
     reader.readAsDataURL(file)
   }
 
+  const handleFileChange = (event, setter) => {
+    const file = event.target.files?.[0]
+    if (!file) {
+      setter('')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => {
+      setter(typeof reader.result === 'string' ? reader.result : '')
+    }
+    reader.readAsDataURL(file)
+  }
+
   const validateTeacherForm = (formData) => {
     const requiredCustomSelects = ['gender', 'status', 'employmentType', 'department']
     for (const field of requiredCustomSelects) {
@@ -110,15 +141,22 @@ function AddTeacherPage() {
       }
     }
 
-    const phoneRegex = /^[6-9]\d{9}$/
+    const isValidMobile = (num) => {
+      const clean = num.replace(/\D/g, '')
+      if (clean.length === 10) return /^[6-9]\d{9}$/.test(clean)
+      if (clean.length === 11) return /^0[6-9]\d{9}$/.test(clean)
+      if (clean.length === 12) return /^91[6-9]\d{9}$/.test(clean)
+      return false
+    }
+
     const phone = formData.get('phoneNumber')?.toString().trim() || ''
-    if (!phoneRegex.test(phone)) {
-      return 'Phone Number must be a valid 10-digit mobile number.'
+    if (!isValidMobile(phone)) {
+      return 'Phone Number must be a valid mobile number.'
     }
 
     const emergencyPhone = formData.get('emergencyContactNumber')?.toString().trim() || ''
-    if (emergencyPhone && !phoneRegex.test(emergencyPhone)) {
-      return 'Emergency Contact Number must be a valid 10-digit mobile number.'
+    if (emergencyPhone && !isValidMobile(emergencyPhone)) {
+      return 'Emergency Contact Number must be a valid mobile number.'
     }
 
     const email = formData.get('email')?.toString().trim() || ''
@@ -184,8 +222,8 @@ function AddTeacherPage() {
       // Academic & Role
       department: formatLabel(formData.get('department')?.toString().trim() || 'N/A'),
       subject: formData.get('mainSubject')?.toString().trim() || 'N/A',
-      classTeacherName: formData.get('classTeacherOf')?.toString().trim() || 'N/A',
-      classTeacherSection: formData.get('classTeacherSection')?.toString().trim() || 'N/A',
+      classTeacherName: formData.get('classTeacherOf')?.toString().trim() === 'none' ? 'N/A' : (formData.get('classTeacherOf')?.toString().trim() || 'N/A'),
+      classTeacherSection: formData.get('classTeacherOf')?.toString().trim() === 'none' ? 'N/A' : (formData.get('classTeacherSection')?.toString().trim() || 'N/A'),
       experienceYears: Number(formData.get('experienceYears') || 0),
       joiningDate: formData.get('joiningDate')?.toString().trim() || 'N/A',
       attendancePercent: formData.get('attendancePercent')?.toString().trim() || '0%',
@@ -207,6 +245,9 @@ function AddTeacherPage() {
 
       documentsStatus: formData.get('documentsStatus')?.toString().trim() || 'Pending Verification',
       photoPreview,
+      qualificationCertificates: qualCertPreview,
+      idProof: idProofPreview,
+      resume: resumePreview,
 
       // Also sending `name` mapping to `fullName` because we originally had a `name` field in UI lists.
       name: formData.get('fullName')?.toString().trim() || 'Teacher',
@@ -228,201 +269,201 @@ function AddTeacherPage() {
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="erp-fees-shell erp-add-teacher-page min-h-screen"
+      className="min-h-screen bg-slate-50 text-slate-900 relative"
     >
-      <header className="erp-add-teacher-header border-b border-cyan-100 bg-white/90 backdrop-blur">
+      <header className="border-b border-slate-200 bg-white shadow-sm sticky top-0 z-10">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">School ERP</p>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">Add Teacher</h1>
           </div>
-          <button type="button" className="erp-nav-button" onClick={() => navigate(-1)}>
+          <button type="button" className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors" onClick={() => navigate(-1)}>
             ← Back
           </button>
         </div>
       </header>
 
-      <div className="erp-add-teacher-container mx-auto w-full max-w-6xl px-5 py-8 sm:px-8">
+      <div className="mx-auto w-full max-w-5xl px-5 py-10">
         <form
-          className="erp-form-shell erp-premium-entry-form erp-add-teacher-form"
+          className="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl"
           onSubmit={handleSubmit}
           onChange={() => {
             if (formError) setFormError('')
           }}
         >
-          {formError ? <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{formError}</p> : null}
-          <p className="erp-form-quick-note">
+          {formError ? <p className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{formError}</p> : null}
+          <p className="mb-8 text-sm text-slate-500">
             Fill basic details first, then role and compensation. Mandatory fields are validated before save.
           </p>
-          <section className="erp-form-section">
-            <h2 className="erp-form-title">Teacher Photo</h2>
-            <div className="erp-student-photo-uploader">
-              <div className="erp-student-photo-preview-wrap">
-                {photoPreview ? <img src={photoPreview} alt="Teacher preview" className="erp-student-photo-preview" /> : <span className="erp-student-photo-placeholder">No Image</span>}
+          <section className={section}>
+            <h2 className={sectionTitle}>Teacher Photo</h2>
+            <div className="flex gap-6 items-center">
+              <div className="h-28 w-28 overflow-hidden rounded-xl border bg-slate-100 flex items-center justify-center">
+                {photoPreview ? <img src={photoPreview} alt="Teacher preview" className="h-full w-full object-cover" /> : <span className="text-slate-400 text-sm">No Image</span>}
               </div>
-              <label className="erp-form-field erp-form-field-full">
-                <span>Upload Teacher Photo</span>
-                <input name="teacherPhoto" type="file" accept="image/*" onChange={handlePhotoChange} required />
+              <label className={label}>
+                <span className={labelText}>Upload Teacher Photo</span>
+                <input name="teacherPhoto" type="file" accept="image/*" onChange={handlePhotoChange} required className="block text-sm" />
               </label>
             </div>
           </section>
 
-          <section className="erp-form-section">
-            <h2 className="erp-form-title">Basic Details</h2>
-            <div className="erp-form-grid">
-              <label className="erp-form-field">
-                <span>Teacher Full Name</span>
-                <input name="fullName" type="text" placeholder="Enter full name" required />
+          <section className={section}>
+            <h2 className={sectionTitle}>Basic Details</h2>
+            <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Teacher Full Name</span>
+                <input name="fullName" type="text" placeholder="Enter full name" className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Employee ID</span>
-                <input name="employeeId" type="text" value={employeeId} readOnly required />
+              <label className={label}>
+                <span className={labelText}>Employee ID</span>
+                <input name="employeeId" type="text" value={employeeId} className={input} readOnly required />
               </label>
-              <label className="erp-form-field">
-                <span>Date of Birth</span>
-                <input name="dob" type="date" required />
+              <label className={label}>
+                <span className={labelText}>Date of Birth</span>
+                <input name="dob" type="date" className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Gender</span>
+              <label className={label}>
+                <span className={labelText}>Gender</span>
                 <CustomSelect name="gender" options={genderOptions} placeholder="Select" required />
               </label>
-              <label className="erp-form-field">
-                <span>Phone Number</span>
-                <input name="phoneNumber" type="tel" placeholder="10 digit mobile" required />
+              <label className={label}>
+                <span className={labelText}>Phone Number</span>
+                <input name="phoneNumber" type="tel" placeholder="10 digit mobile" className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Email</span>
-                <input name="email" type="email" placeholder="teacher@email.com" required />
+              <label className={label}>
+                <span className={labelText}>Email</span>
+                <input name="email" type="email" placeholder="teacher@email.com" className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Status</span>
+              <label className={label}>
+                <span className={labelText}>Status</span>
                 <CustomSelect name="status" options={statusOptions} placeholder="Select" required />
               </label>
-              <label className="erp-form-field">
-                <span>Employment Type</span>
+              <label className={label}>
+                <span className={labelText}>Employment Type</span>
                 <CustomSelect name="employmentType" options={employmentTypeOptions} placeholder="Select" required />
               </label>
-              <label className="erp-form-field erp-form-field-full">
-                <span>Address</span>
-                <textarea name="address" rows={3} placeholder="Complete address" required />
+              <label className={`${label} sm:col-span-2 lg:col-span-3`}>
+                <span className={labelText}>Address</span>
+                <textarea name="address" rows={2} placeholder="Complete address" className={textarea} required />
               </label>
             </div>
           </section>
 
-          <section className="erp-form-section">
-            <h2 className="erp-form-title">Academic and Role</h2>
-            <div className="erp-form-grid">
-              <label className="erp-form-field">
-                <span>Department</span>
+          <section className={section}>
+            <h2 className={sectionTitle}>Academic and Role</h2>
+            <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Department</span>
                 <CustomSelect name="department" options={departmentOptions} placeholder="Select" required />
               </label>
-              <label className="erp-form-field">
-                <span>Main Subject</span>
-                <input name="mainSubject" type="text" placeholder="Example: Physics" required />
+              <label className={label}>
+                <span className={labelText}>Main Subject</span>
+                <input name="mainSubject" type="text" placeholder="Example: Physics" className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Class Teacher Of</span>
-                <CustomSelect name="classTeacherOf" options={classOptions} placeholder="Select Class" />
+              <label className={label}>
+                <span className={labelText}>Class Teacher Of</span>
+                <CustomSelect name="classTeacherOf" options={dynamicClassOptions} placeholder="Select Class" />
               </label>
-              <label className="erp-form-field">
-                <span>Section</span>
+              <label className={label}>
+                <span className={labelText}>Section</span>
                 <CustomSelect name="classTeacherSection" options={sectionOptions} placeholder="Select Section" />
               </label>
-              <label className="erp-form-field">
-                <span>Experience (Years)</span>
-                <input name="experienceYears" type="number" min="0" placeholder="0" required />
+              <label className={label}>
+                <span className={labelText}>Experience (Years)</span>
+                <input name="experienceYears" type="number" min="0" placeholder="0" className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Date of Joining</span>
-                <input name="joiningDate" type="date" required />
+              <label className={label}>
+                <span className={labelText}>Date of Joining</span>
+                <input name="joiningDate" type="date" className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Attendance Percentage</span>
-                <input name="attendancePercent" type="text" placeholder="Example: 96%" />
+              <label className={label}>
+                <span className={labelText}>Attendance Percentage</span>
+                <input name="attendancePercent" type="text" placeholder="Example: 96%" className={input} />
               </label>
-              <label className="erp-form-field">
-                <span>Leave Balance (Days)</span>
-                <input name="leaveBalance" type="number" min="0" placeholder="0" />
-              </label>
-            </div>
-          </section>
-
-          <section className="erp-form-section">
-            <h2 className="erp-form-title">Qualification</h2>
-            <div className="erp-form-grid">
-              <label className="erp-form-field">
-                <span>Highest Qualification</span>
-                <input name="highestQualification" type="text" placeholder="M.Ed / M.Sc / B.Ed etc." required />
-              </label>
-              <label className="erp-form-field">
-                <span>University / Institute</span>
-                <input name="university" type="text" placeholder="University name" required />
-              </label>
-              <label className="erp-form-field">
-                <span>Passing Year</span>
-                <input name="passingYear" type="number" min="1980" max="2099" placeholder="YYYY" required />
-              </label>
-              <label className="erp-form-field">
-                <span>Certification Details</span>
-                <input name="certifications" type="text" placeholder="CTET / TET / Other certifications" />
+              <label className={label}>
+                <span className={labelText}>Leave Balance (Days)</span>
+                <input name="leaveBalance" type="number" min="0" placeholder="0" className={input} />
               </label>
             </div>
           </section>
 
-          <section className="erp-form-section">
-            <h2 className="erp-form-title">Contact and Compensation</h2>
-            <div className="erp-form-grid">
-              <label className="erp-form-field">
-                <span>Emergency Contact Name</span>
-                <input name="emergencyContactName" type="text" placeholder="Emergency contact person" />
+          <section className={section}>
+            <h2 className={sectionTitle}>Qualification</h2>
+            <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Highest Qualification</span>
+                <input name="highestQualification" type="text" placeholder="M.Ed / M.Sc / B.Ed etc." className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Emergency Contact Number</span>
-                <input name="emergencyContactNumber" type="tel" placeholder="Emergency number" />
+              <label className={label}>
+                <span className={labelText}>University / Institute</span>
+                <input name="university" type="text" placeholder="University name" className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Salary Grade</span>
-                <input name="salaryGrade" type="text" placeholder="Example: Grade A" />
+              <label className={label}>
+                <span className={labelText}>Passing Year</span>
+                <input name="passingYear" type="number" min="1980" max="2099" placeholder="YYYY" className={input} required />
               </label>
-              <label className="erp-form-field">
-                <span>Base Salary</span>
-                <input type="number" min="0" step="0.01" value={salary} onChange={(event) => setSalary(event.target.value)} placeholder="Enter salary" />
-              </label>
-              <label className="erp-form-field">
-                <span>Allowance</span>
-                <input type="number" min="0" step="0.01" value={allowance} onChange={(event) => setAllowance(event.target.value)} placeholder="Enter allowance" />
-              </label>
-              <label className="erp-form-field">
-                <span>Total Compensation</span>
-                <input type="text" value={totalCompensation} readOnly placeholder="Auto calculated" />
+              <label className={label}>
+                <span className={labelText}>Certification Details</span>
+                <input name="certifications" type="text" placeholder="CTET / TET / Other certifications" className={input} />
               </label>
             </div>
           </section>
 
-          <section className="erp-form-section">
-            <h2 className="erp-form-title">Documents</h2>
-            <div className="erp-form-grid">
-              <label className="erp-form-field">
-                <span>Qualification Certificates</span>
-                <input name="qualificationCertificates" type="file" accept=".pdf,.jpg,.jpeg,.png" required />
+          <section className={section}>
+            <h2 className={sectionTitle}>Contact and Compensation</h2>
+            <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Emergency Contact Name</span>
+                <input name="emergencyContactName" type="text" placeholder="Emergency contact person" className={input} />
               </label>
-              <label className="erp-form-field">
-                <span>ID Proof</span>
-                <input name="idProof" type="file" accept=".pdf,.jpg,.jpeg,.png" required />
+              <label className={label}>
+                <span className={labelText}>Emergency Contact Number</span>
+                <input name="emergencyContactNumber" type="tel" placeholder="Emergency number" className={input} />
               </label>
-              <label className="erp-form-field">
-                <span>Resume</span>
-                <input name="resume" type="file" accept=".pdf,.doc,.docx" />
+              <label className={label}>
+                <span className={labelText}>Salary Grade</span>
+                <input name="salaryGrade" type="text" placeholder="Example: Grade A" className={input} />
               </label>
-              <label className="erp-form-field">
-                <span>Documents Status</span>
-                <input name="documentsStatus" type="text" placeholder="Verified / Pending Verification" />
+              <label className={label}>
+                <span className={labelText}>Base Salary</span>
+                <input type="number" min="0" step="0.01" value={salary} onChange={(event) => setSalary(event.target.value)} placeholder="Enter salary" className={input} />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Allowance</span>
+                <input type="number" min="0" step="0.01" value={allowance} onChange={(event) => setAllowance(event.target.value)} placeholder="Enter allowance" className={input} />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Total Compensation (Auto Calculated)</span>
+                <input type="text" value={totalCompensation} readOnly placeholder="Auto calculated" className={`${input} bg-slate-100 font-bold`} />
               </label>
             </div>
           </section>
 
-          <div className="erp-form-actions erp-form-actions-sticky">
-            <button type="submit" className="erp-form-primary-button">
+          <section className={section}>
+            <h2 className={sectionTitle}>Documents</h2>
+            <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Qualification Certificates</span>
+                <input name="qualificationCertificates" type="file" accept=".pdf,.jpg,.jpeg,.png" className="block text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100" onChange={(e) => handleFileChange(e, setQualCertPreview)} />
+              </label>
+              <label className={label}>
+                <span className={labelText}>ID Proof</span>
+                <input name="idProof" type="file" accept=".pdf,.jpg,.jpeg,.png" className="block text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100" onChange={(e) => handleFileChange(e, setIdProofPreview)} />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Resume</span>
+                <input name="resume" type="file" accept=".pdf,.doc,.docx" className="block text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100" onChange={(e) => handleFileChange(e, setResumePreview)} />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Documents Status</span>
+                <input name="documentsStatus" type="text" placeholder="Verified / Pending Verification" className={input} />
+              </label>
+            </div>
+          </section>
+
+          <div className="flex justify-end pt-6">
+            <button type="submit" className={submitBtn}>
               Save Teacher
             </button>
           </div>
