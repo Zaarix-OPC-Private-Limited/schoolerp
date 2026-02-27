@@ -422,6 +422,12 @@ function TeacherHubPage() {
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
+                className="rounded-lg border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 hover:shadow"
+                onClick={() => navigate('/teachers/add')}>
+                + Add Teacher
+              </button>
+              <button
+                type="button"
                 className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                 onClick={() => navigate('/dashboard')}>
                 Back to Dashboard
