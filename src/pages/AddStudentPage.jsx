@@ -27,7 +27,45 @@ const genderOptions = [
   { value: "other", label: "Other" },
 ];
 
+const bloodGroupOptions = [
+  { value: "A+", label: "A+" },
+  { value: "A-", label: "A-" },
+  { value: "B+", label: "B+" },
+  { value: "B-", label: "B-" },
+  { value: "AB+", label: "AB+" },
+  { value: "AB-", label: "AB-" },
+  { value: "O+", label: "O+" },
+  { value: "O-", label: "O-" },
+];
 
+const categoryOptions = [
+  { value: "General", label: "General" },
+  { value: "OBC", label: "OBC" },
+  { value: "SC", label: "SC" },
+  { value: "ST", label: "ST" },
+  { value: "Other", label: "Other" },
+];
+
+const religionOptions = [
+  { value: "Hindu", label: "Hindu" },
+  { value: "Muslim", label: "Muslim" },
+  { value: "Sikh", label: "Sikh" },
+  { value: "Christian", label: "Christian" },
+  { value: "Other", label: "Other" },
+];
+
+const transportOptions = [
+  { value: "Self", label: "Self" },
+  { value: "School Bus", label: "School Bus" },
+  { value: "Private Van", label: "Private Van" },
+  { value: "Public Transport", label: "Public Transport" },
+];
+
+const statusOptions = [
+  { value: "Active", label: "Active" },
+  { value: "Inactive", label: "Inactive" },
+  { value: "Pending Admission", label: "Pending Admission" },
+];
 
 const generateAdmissionNumber = () => {
   const now = Date.now().toString();
@@ -48,6 +86,8 @@ function AddStudentPage() {
 
   const [selectedClass, setSelectedClass] = useState("");
   const [admissionNumber] = useState(generateAdmissionNumber);
+
+  // Custom states for calculations or selects
   const [totalFee, setTotalFee] = useState("");
   const [paidAmount, setPaidAmount] = useState("");
   const [photoPreview, setPhotoPreview] = useState("");
@@ -78,12 +118,52 @@ function AddStudentPage() {
     const student = {
       id: Date.now().toString(),
       name: formData.get("fullName"),
+      admissionNumber,
       rollNumber: formData.get("rollNumber"),
       className: resolvedClassName,
-      admissionNumber,
-      totalFee,
-      paidAmount,
-      pendingAmount,
+      section: classRec?.section || "", // Will be extracted from resolved Class Name later if needed
+      dob: formData.get("dob"),
+      gender: formData.get("gender"),
+      bloodGroup: formData.get("bloodGroup"),
+      category: formData.get("category"),
+      religion: formData.get("religion"),
+      aadharLast4: formData.get("aadharNumber"), // User requested "Aadhaar Number (Optional)"
+      admissionDate: formData.get("admissionDate"),
+      studentStatus: formData.get("studentStatus") || "Active",
+      // Class Applying For is technically `className` resolved above.
+      address: formData.get("address"),
+
+      fatherName: formData.get("fatherName"),
+      fatherContact: formData.get("fatherContact"),
+      fatherEmail: formData.get("fatherEmail"),
+      motherName: formData.get("motherName"),
+      motherContact: formData.get("motherContact"),
+      guardianName: formData.get("guardianName"),
+      guardianRelation: formData.get("guardianRelation"),
+      guardianContact: formData.get("guardianContact"),
+      emergencyContact: formData.get("emergencyContact"),
+
+      transportMode: formData.get("transportMode"),
+      busRoute: formData.get("busRoute"),
+      pickupPoint: formData.get("pickupPoint"),
+      driverName: formData.get("driverName"),
+      driverContactNumber: formData.get("driverContactNumber"),
+      vehicleNumber: formData.get("vehicleNumber"),
+
+      previousSchool: formData.get("previousSchool"),
+      previousPerformance: formData.get("lastClassPassed"),
+      previousSchoolBoard: formData.get("previousSchoolBoard"),
+      transferCertificateNumber: formData.get("transferCertificateNumber"),
+
+      feeCategory: formData.get("feeCategory"),
+      scholarship: formData.get("scholarship"),
+      concessionAmount: Number(formData.get("concessionAmount") || 0),
+      paymentHistory: formData.get("paymentHistory"),
+
+      // Keep state values
+      totalFee: Number(totalFee || 0),
+      paidAmount: Number(paidAmount || 0),
+      pendingAmount: Number(pendingAmount || 0),
       photoPreview,
     };
 
@@ -137,33 +217,28 @@ function AddStudentPage() {
             </div>
           </section>
 
-          {/* PERSONAL */}
+          {/* PERSONAL & GENERAL LOGISTICS */}
           <section className={section}>
             <h2 className={sectionTitle}>Personal Details</h2>
 
             <div className={grid}>
               <label className={label}>
-                <span className={labelText}>Full Name</span>
-                <input name="fullName" required className={input} />
+                <span className={labelText}>Full Name *</span>
+                <input name="fullName" required className={input} placeholder="John Doe" />
               </label>
 
               <label className={label}>
-                <span className={labelText}>Admission Number</span>
+                <span className={labelText}>Admission Number *</span>
                 <input value={admissionNumber} readOnly className={input} />
               </label>
 
               <label className={label}>
-                <span className={labelText}>Roll Number</span>
-                <input name="rollNumber" required className={input} />
+                <span className={labelText}>Roll Number *</span>
+                <input name="rollNumber" required className={input} placeholder="e.g. 101" />
               </label>
 
               <label className={label}>
-                <span className={labelText}>Gender</span>
-                <CustomSelect name="gender" options={genderOptions} required />
-              </label>
-
-              <label className={label}>
-                <span className={labelText}>Class</span>
+                <span className={labelText}>Class Applying For *</span>
                 <CustomSelect
                   name="className"
                   options={classDropdownOptions}
@@ -174,8 +249,156 @@ function AddStudentPage() {
               </label>
 
               <label className={label}>
-                <span className={labelText}>Address</span>
-                <textarea name="address" rows={2} className={textarea} />
+                <span className={labelText}>Section</span>
+                <input value={(classRecords || []).find((c) => c._id === selectedClass || c.id === selectedClass)?.section || ''} readOnly className={input} placeholder="Auto-fills from class" />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Date of Birth *</span>
+                <input type="date" name="dob" required className={input} />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Gender *</span>
+                <CustomSelect name="gender" options={genderOptions} required />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Blood Group</span>
+                <CustomSelect name="bloodGroup" options={bloodGroupOptions} />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Category</span>
+                <CustomSelect name="category" options={categoryOptions} />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Religion</span>
+                <CustomSelect name="religion" options={religionOptions} />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Aadhaar Number (Optional)</span>
+                <input name="aadharNumber" maxLength={12} className={input} placeholder="12 Digit Aadhaar" />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Admission Date *</span>
+                <input type="date" name="admissionDate" required className={input} defaultValue={new Date().toISOString().split('T')[0]} />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Current Status *</span>
+                <CustomSelect name="studentStatus" options={statusOptions} required />
+              </label>
+
+              <label className={`${label} sm:col-span-2 lg:col-span-3`}>
+                <span className={labelText}>Address *</span>
+                <textarea name="address" required rows={2} className={textarea} placeholder="Full residential physical address" />
+              </label>
+            </div>
+          </section>
+
+          {/* PARENT / GUARDIAN */}
+          <section className={section}>
+            <h2 className={sectionTitle}>Parent / Guardian Details</h2>
+            <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Father Full Name *</span>
+                <input name="fatherName" required className={input} placeholder="Father's name" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Father Contact Number *</span>
+                <input name="fatherContact" type="tel" required className={input} placeholder="+1..." />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Father Email</span>
+                <input name="fatherEmail" type="email" className={input} placeholder="father@example.com" />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Mother Full Name *</span>
+                <input name="motherName" required className={input} placeholder="Mother's name" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Mother Contact Number *</span>
+                <input name="motherContact" type="tel" required className={input} placeholder="+1..." />
+              </label>
+              <div>{/* Empty cell for grid alignment */}</div>
+
+              <label className={label}>
+                <span className={labelText}>Guardian Full Name</span>
+                <input name="guardianName" className={input} placeholder="Local Guardian (if any)" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Guardian Relation</span>
+                <input name="guardianRelation" className={input} placeholder="e.g. Uncle" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Guardian Contact Number</span>
+                <input name="guardianContact" type="tel" className={input} placeholder="+1..." />
+              </label>
+
+              <label className={`${label} sm:col-span-2 lg:col-span-3`}>
+                <span className={labelText}>Emergency Contact Number *</span>
+                <input name="emergencyContact" type="tel" required className={input} placeholder="Primary emergency contact" />
+              </label>
+            </div>
+          </section>
+
+          {/* TRANSPORT */}
+          <section className={section}>
+            <h2 className={sectionTitle}>Transport Details</h2>
+            <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Mode of Transport</span>
+                <CustomSelect name="transportMode" options={transportOptions} />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Bus Route</span>
+                <input name="busRoute" className={input} placeholder="e.g. Route A" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Pickup Point</span>
+                <input name="pickupPoint" className={input} placeholder="e.g. Main Gate" />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Driver Name</span>
+                <input name="driverName" className={input} placeholder="Assigned driver" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Driver Contact Number</span>
+                <input name="driverContactNumber" type="tel" className={input} placeholder="+1..." />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Vehicle Number</span>
+                <input name="vehicleNumber" className={input} placeholder="e.g. AB 12 CD 3456" />
+              </label>
+            </div>
+          </section>
+
+          {/* PREVIOUS SCHOOL */}
+          <section className={section}>
+            <h2 className={sectionTitle}>Previous Academic Details</h2>
+            <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Previous School Name</span>
+                <input name="previousSchool" className={input} placeholder="Name of previous institution" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Last Class Passed</span>
+                <input name="lastClassPassed" className={input} placeholder="e.g. 5th Grade" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Previous School Board</span>
+                <input name="previousSchoolBoard" className={input} placeholder="e.g. CBSE / State Board" />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Transfer Certificate Number</span>
+                <input name="transferCertificateNumber" className={input} placeholder="TC Number from previous school" />
               </label>
             </div>
           </section>
@@ -185,6 +408,10 @@ function AddStudentPage() {
             <h2 className={sectionTitle}>Fee Details</h2>
 
             <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Fee Category</span>
+                <input name="feeCategory" className={input} placeholder="e.g. General / Staff Child" />
+              </label>
               <label className={label}>
                 <span className={labelText}>Total Fee</span>
                 <input
@@ -206,8 +433,42 @@ function AddStudentPage() {
               </label>
 
               <label className={label}>
-                <span className={labelText}>Pending</span>
-                <input value={pendingAmount} readOnly className={input} />
+                <span className={labelText}>Pending Amount (Auto Calculated)</span>
+                <input value={pendingAmount} readOnly className={`${input} bg-slate-100 font-bold`} />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Scholarship / Concession</span>
+                <input name="scholarship" className={input} placeholder="e.g. Merit Scholarship" />
+              </label>
+
+              <label className={label}>
+                <span className={labelText}>Scholarship / Concession Amount</span>
+                <input name="concessionAmount" type="number" className={input} placeholder="0" />
+              </label>
+
+              <label className={`${label} sm:col-span-2 lg:col-span-3`}>
+                <span className={labelText}>Payment History (Notes)</span>
+                <textarea name="paymentHistory" rows={2} className={textarea} placeholder="Any advance notes or payment references." />
+              </label>
+            </div>
+          </section>
+
+          {/* DOCUMENTS */}
+          <section className={section}>
+            <h2 className={sectionTitle}>Required Documents</h2>
+            <div className={grid}>
+              <label className={label}>
+                <span className={labelText}>Birth Certificate</span>
+                <input type="file" name="birthCertificate" className="block text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>Previous Class Marksheet</span>
+                <input type="file" name="previousMarksheet" className="block text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100" />
+              </label>
+              <label className={label}>
+                <span className={labelText}>10th Marksheet (Class 12 entries)</span>
+                <input type="file" name="tenthMarksheet" className="block text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100" />
               </label>
             </div>
           </section>
