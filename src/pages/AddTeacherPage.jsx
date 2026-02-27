@@ -167,37 +167,50 @@ function AddTeacherPage() {
     }
     setFormError('')
 
+    // 1-to-1 Mapping to Teacher.js Model
     const teacherPayload = {
+      // Assuming context handles userId and schoolId
       id: formData.get('employeeId')?.toString().trim() || `teacher-${Date.now()}`,
       employeeId: formData.get('employeeId')?.toString().trim() || 'N/A',
-      name: formData.get('fullName')?.toString().trim() || 'Teacher',
+
+      // Basic Details
+      dob: formData.get('dob')?.toString().trim() || 'N/A',
+      gender: formatLabel(formData.get('gender')?.toString().trim() || 'N/A'),
+      phoneNumber: formData.get('phoneNumber')?.toString().trim() || 'N/A',
+      status: formData.get('status')?.toString().trim() || 'active',
+      employmentType: formatLabel(formData.get('employmentType')?.toString().trim() || 'N/A'),
+      address: formData.get('address')?.toString().trim() || 'N/A',
+
+      // Academic & Role
+      department: formatLabel(formData.get('department')?.toString().trim() || 'N/A'),
       subject: formData.get('mainSubject')?.toString().trim() || 'N/A',
       classTeacherName: formData.get('classTeacherOf')?.toString().trim() || 'N/A',
       classTeacherSection: formData.get('classTeacherSection')?.toString().trim() || 'N/A',
-      department: formatLabel(formData.get('department')?.toString().trim() || 'N/A'),
-      qualification: formData.get('highestQualification')?.toString().trim() || 'N/A',
-      experienceYears: formData.get('experienceYears')?.toString().trim() || '0',
-      contactNumber: formData.get('phoneNumber')?.toString().trim() || 'N/A',
-      email: formData.get('email')?.toString().trim() || 'N/A',
-      dob: formData.get('dob')?.toString().trim() || 'N/A',
-      gender: formatLabel(formData.get('gender')?.toString().trim() || 'N/A'),
-      address: formData.get('address')?.toString().trim() || 'N/A',
-      status: formData.get('status')?.toString().trim() || 'active',
-      employmentType: formatLabel(formData.get('employmentType')?.toString().trim() || 'N/A'),
+      experienceYears: Number(formData.get('experienceYears') || 0),
       joiningDate: formData.get('joiningDate')?.toString().trim() || 'N/A',
       attendancePercent: formData.get('attendancePercent')?.toString().trim() || '0%',
-      leaveBalance: formData.get('leaveBalance')?.toString().trim() || '0',
+      leaveBalance: Number(formData.get('leaveBalance') || 0),
+
+      // Qualification
+      qualification: formData.get('highestQualification')?.toString().trim() || 'N/A',
+      university: formData.get('university')?.toString().trim() || 'N/A',
+      passingYear: Number(formData.get('passingYear') || 0),
+      certifications: formData.get('certifications')?.toString().trim() || 'N/A',
+
+      // Contact & Compensation
       emergencyContactName: formData.get('emergencyContactName')?.toString().trim() || 'N/A',
       emergencyContactNumber: formData.get('emergencyContactNumber')?.toString().trim() || 'N/A',
       salaryGrade: formData.get('salaryGrade')?.toString().trim() || 'N/A',
-      salary: salary || '0',
-      allowance: allowance || '0',
-      totalCompensation,
-      university: formData.get('university')?.toString().trim() || 'N/A',
-      passingYear: formData.get('passingYear')?.toString().trim() || 'N/A',
-      certifications: formData.get('certifications')?.toString().trim() || 'N/A',
+      salary: Number(salary || 0),
+      allowance: Number(allowance || 0),
+      totalCompensation: Number(totalCompensation || 0),
+
       documentsStatus: formData.get('documentsStatus')?.toString().trim() || 'Pending Verification',
       photoPreview,
+
+      // Also sending `name` mapping to `fullName` because we originally had a `name` field in UI lists.
+      name: formData.get('fullName')?.toString().trim() || 'Teacher',
+      email: formData.get('email')?.toString().trim() || 'N/A',
     }
 
     try {
