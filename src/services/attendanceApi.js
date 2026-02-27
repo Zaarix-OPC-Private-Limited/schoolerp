@@ -1,4 +1,4 @@
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '')
 
 const buildUrl = (path, query = {}) => {
   const url = new URL(`${API_BASE}${path}`, window.location.origin)
@@ -16,6 +16,7 @@ const request = async (path, options = {}) => {
       'Content-Type': 'application/json',
       ...(options.headers || {}),
     },
+    credentials: 'include',
     body: options.body ? JSON.stringify(options.body) : undefined,
   })
 

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
+import { login } from '../services/authApi'
 
 const roles = ['Director', 'Principal', 'Vice Principal', 'Controller']
 const roleIcons = {
@@ -52,7 +53,7 @@ function LoginPage() {
     return () => document.removeEventListener('mousedown', handleOutsideClick)
   }, [])
 
-  const handleLoginSubmit = (event) => {
+  const handleLoginSubmit = async (event) => {
     event.preventDefault()
     const trimmedEmail = email.trim()
     const trimmedPassword = password.trim()
@@ -61,21 +62,23 @@ function LoginPage() {
       setFormError('Please select a role before login.')
       return
     }
-    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(trimmedEmail)) {
-      setFormError('Please enter a valid Gmail address (example@gmail.com).')
-      return
-    }
     if (trimmedPassword.length < 6) {
       setFormError('Password must be at least 6 characters.')
       return
     }
 
     setFormError('')
-    handleLogin({
-      username: trimmedEmail,
-      role: selectedRole,
-    })
-    navigate('/dashboard', { replace: true })
+    try {
+      const response = await login({ email: trimmedEmail, password: trimmedPassword })
+      const user = response?.data?.user
+      if (!user) {
+        throw new Error('Invalid response from server')
+      }
+      handleLogin(user)
+      navigate('/dashboard', { replace: true })
+    } catch (error) {
+      setFormError(error.message || 'Login failed')
+    }
   }
 
   return (

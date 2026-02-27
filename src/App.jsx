@@ -32,7 +32,7 @@ function AppContent() {
     if (typeof window === 'undefined') return true
     return window.sessionStorage.getItem(SPLASH_SEEN_KEY) !== '1'
   })
-  const { isLoggedIn } = useAppContext()
+  const { isLoggedIn, isAuthLoading } = useAppContext()
 
   useEffect(() => {
     if (!showSplash) return
@@ -43,7 +43,7 @@ function AppContent() {
     return () => clearTimeout(timer)
   }, [showSplash])
 
-  if (showSplash) return <SplashScreen />
+  if (showSplash || isAuthLoading) return <SplashScreen />
 
   return (
     <AnimatePresence mode="wait">

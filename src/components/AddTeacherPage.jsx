@@ -153,7 +153,7 @@ function AddTeacherPage({ onBack, onSaveTeacher }) {
     return ''
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const validationMessage = validateTeacherForm(formData)
@@ -196,8 +196,13 @@ function AddTeacherPage({ onBack, onSaveTeacher }) {
       photoPreview,
     }
 
-    onSaveTeacher?.(teacherPayload)
-    onBack?.()
+    try {
+      await onSaveTeacher?.(teacherPayload)
+      alert('Teacher successfully created!')
+      onBack?.()
+    } catch (error) {
+      setFormError(error.message || 'Failed to save teacher')
+    }
   }
 
   return (

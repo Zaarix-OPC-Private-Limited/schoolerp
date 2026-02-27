@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { getMe, logout as apiLogout } from '../services/authApi'
+import { createStudent, createTeacher } from '../services/api'
 
 const APP_SESSION_KEY = 'erp_app_session_v1'
 
@@ -46,10 +48,11 @@ const defaultExpenseLedger = [
 const AppContext = createContext(null)
 
 export function AppProvider({ children }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(readStoredSession()?.isLoggedIn))
-  const [loggedInDisplayName, setLoggedInDisplayName] = useState(() => String(readStoredSession()?.loggedInDisplayName || ''))
-  const [loggedInRole, setLoggedInRole] = useState(() => String(readStoredSession()?.loggedInRole || ''))
-  const [loggedInEmail, setLoggedInEmail] = useState(() => String(readStoredSession()?.loggedInEmail || ''))
+  const [isAuthLoading, setIsAuthLoading] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [loggedInDisplayName, setLoggedInDisplayName] = useState('')
+  const [loggedInRole, setLoggedInRole] = useState('')
+  const [loggedInEmail, setLoggedInEmail] = useState('')
   const [studentRecords, setStudentRecords] = useState([])
   const [teacherRecords, setTeacherRecords] = useState(defaultTeacherRecords)
   const [staffRecords, setStaffRecords] = useState(defaultStaffRecords)
@@ -65,16 +68,36 @@ export function AppProvider({ children }) {
   const [teacherAttendanceIntent, setTeacherAttendanceIntent] = useState(null)
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (!isLoggedIn) {
-      window.sessionStorage.removeItem(APP_SESSION_KEY)
-      return
+    let isMounted = true
+
+    const verifySession = async () => {
+      try {
+        const response = await getMe()
+        if (isMounted && response?.data?.user) {
+          const user = response.data.user
+          const displayName = user?.name || formatDisplayName(user?.email || '')
+          setLoggedInDisplayName(displayName)
+          setLoggedInRole(String(user?.role || ''))
+          setLoggedInEmail(String(user?.email || ''))
+          setIsLoggedIn(true)
+        }
+      } catch (error) {
+        if (isMounted) {
+          setIsLoggedIn(false)
+        }
+      } finally {
+        if (isMounted) {
+          setIsAuthLoading(false)
+        }
+      }
     }
-    window.sessionStorage.setItem(
-      APP_SESSION_KEY,
-      JSON.stringify({ isLoggedIn: true, loggedInDisplayName, loggedInRole, loggedInEmail }),
-    )
-  }, [isLoggedIn, loggedInDisplayName, loggedInEmail, loggedInRole])
+
+    verifySession()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const formatDisplayName = (rawUsername) => {
     const input = String(rawUsername || '').trim().toLowerCase()
@@ -89,27 +112,30 @@ export function AppProvider({ children }) {
       .join(' ')
   }
 
-  const handleLogin = (loginData) => {
-    const username = String(loginData?.username || '').trim()
-    setLoggedInDisplayName(formatDisplayName(username))
-    setLoggedInRole(String(loginData?.role || ''))
-    setLoggedInEmail(username)
+  const handleLogin = (user) => {
+    const displayName = user?.name || formatDisplayName(user?.email || '')
+    setLoggedInDisplayName(displayName)
+    setLoggedInRole(String(user?.role || ''))
+    setLoggedInEmail(String(user?.email || ''))
     setIsLoggedIn(true)
   }
 
-  const handleLogout = () => {
-    setIsLoggedIn(false)
-    setLoggedInDisplayName('')
-    setLoggedInRole('')
-    setLoggedInEmail('')
-    setMarksheetIntent(null)
-    setNoticeIntent(null)
-    setStudentsHubIntent(null)
-    setTeacherHubIntent(null)
-    setAttendanceIntent(null)
-    setTeacherAttendanceIntent(null)
-    if (typeof window !== 'undefined') {
-      window.sessionStorage.removeItem(APP_SESSION_KEY)
+  const handleLogout = async () => {
+    try {
+      await apiLogout()
+    } catch (error) {
+      // Ignore API errors on logout
+    } finally {
+      setIsLoggedIn(false)
+      setLoggedInDisplayName('')
+      setLoggedInRole('')
+      setLoggedInEmail('')
+      setMarksheetIntent(null)
+      setNoticeIntent(null)
+      setStudentsHubIntent(null)
+      setTeacherHubIntent(null)
+      setAttendanceIntent(null)
+      setTeacherAttendanceIntent(null)
     }
   }
 
@@ -121,8 +147,18 @@ export function AppProvider({ children }) {
     })
   }
 
-  const addStudent = (student) => {
-    setStudentRecords((prev) => [student, ...prev])
+  const addStudent = async (student) => {
+    try {
+      const response = await createStudent(student)
+      if (response && response.data && response.data.student) {
+        setStudentRecords((prev) => [response.data.student, ...prev])
+      } else {
+        setStudentRecords((prev) => [student, ...prev])
+      }
+    } catch (error) {
+      console.error('Failed to create student:', error)
+      throw error
+    }
   }
 
   const updateTeacher = (updatedTeacher) => {
@@ -133,8 +169,18 @@ export function AppProvider({ children }) {
     })
   }
 
-  const addTeacher = (teacher) => {
-    setTeacherRecords((prev) => [teacher, ...prev])
+  const addTeacher = async (teacher) => {
+    try {
+      const response = await createTeacher(teacher)
+      if (response && response.data && response.data.teacher) {
+        setTeacherRecords((prev) => [response.data.teacher, ...prev])
+      } else {
+        setTeacherRecords((prev) => [teacher, ...prev])
+      }
+    } catch (error) {
+      console.error('Failed to create teacher:', error)
+      throw error
+    }
   }
 
   const addStaff = (staffMember) => {
@@ -174,6 +220,7 @@ export function AppProvider({ children }) {
         updateTeacher,
         addTeacher,
         addStaff,
+        isAuthLoading,
       }}
     >
       {children}

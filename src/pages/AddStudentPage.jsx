@@ -207,7 +207,7 @@ function AddStudentPage() {
     return ''
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const validationMessage = validateStudentForm(formData)
@@ -279,8 +279,13 @@ function AddStudentPage() {
       photoPreview,
     }
 
-    addStudent(studentPayload)
-    navigate('/students')
+    try {
+      await addStudent(studentPayload)
+      alert('Student successfully created!')
+      navigate('/students')
+    } catch (error) {
+      setFormError(error.message || 'Failed to save student')
+    }
   }
 
   return (
