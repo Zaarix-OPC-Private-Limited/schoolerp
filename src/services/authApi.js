@@ -10,14 +10,17 @@ const buildUrl = (path, query = {}) => {
 }
 
 export const request = async (path, options = {}) => {
+    const isFormData = options.body instanceof FormData
+
     const response = await fetch(buildUrl(path, options.query), {
         method: options.method || 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            ...(options.headers || {}),
-        },
+        headers: isFormData
+            ? { ...(options.headers || {}) }                           // Let browser set multipart boundary
+            : { 'Content-Type': 'application/json', ...(options.headers || {}) },
         credentials: 'include',
-        body: options.body ? JSON.stringify(options.body) : undefined,
+        body: isFormData
+            ? options.body                                             // Send FormData as-is
+            : options.body ? JSON.stringify(options.body) : undefined, // Stringify plain objects
     })
 
     if (!response.ok) {

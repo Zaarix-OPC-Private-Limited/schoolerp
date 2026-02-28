@@ -86,10 +86,12 @@ function AddStudentPage() {
   const [selectedClass, setSelectedClass] = useState("");
   const [admissionNumber] = useState(generateAdmissionNumber);
 
-  // Custom states for calculations or selects
+  // Store the raw File object (for upload) and a preview URL (for display)
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState("");
+
   const [totalFee, setTotalFee] = useState("");
   const [paidAmount, setPaidAmount] = useState("");
-  const [photoPreview, setPhotoPreview] = useState("");
   const [formError, setFormError] = useState("");
 
   const pendingAmount = useMemo(() => {
@@ -101,6 +103,8 @@ function AddStudentPage() {
   const handlePhotoChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setPhotoFile(file);
+    // Show local preview immediately — actual upload happens on submit
     const reader = new FileReader();
     reader.onload = () => setPhotoPreview(reader.result);
     reader.readAsDataURL(file);
@@ -114,63 +118,66 @@ function AddStudentPage() {
     const classRec = (classRecords || []).find((c) => c._id === classId || c.id === classId);
     const resolvedClassName = classRec ? `${classRec.name} - ${classRec.section}` : classId;
 
-    const student = {
-      id: Date.now().toString(),
-      name: formData.get("fullName"),
+    // Build a new FormData to send to the backend
+    const payload = new FormData();
+
+    // ── Attach the photo file (if selected) under the field name 'photo'
+    // multer on the backend reads this as req.file ──────────────────────
+    if (photoFile) {
+      payload.append('photo', photoFile, photoFile.name);
+    }
+
+    // ── Append all text/number fields ───────────────────────────────────
+    const fields = {
+      name: formData.get('fullName'),
       admissionNumber,
-      rollNumber: formData.get("rollNumber"),
+      rollNumber: formData.get('rollNumber') || '',
       className: resolvedClassName,
-      section: classRec?.section || "", // Will be extracted from resolved Class Name later if needed
-      dob: formData.get("dob"),
-      gender: formData.get("gender"),
-      bloodGroup: formData.get("bloodGroup"),
-      category: formData.get("category"),
-      religion: formData.get("religion"),
-      aadharLast4: formData.get("aadharNumber"), // User requested "Aadhaar Number (Optional)"
-      admissionDate: formData.get("admissionDate"),
-      studentStatus: formData.get("studentStatus") || "Active",
-      // Class Applying For is technically `className` resolved above.
-      address: formData.get("address"),
-
-      fatherName: formData.get("fatherName"),
-      fatherContact: formData.get("fatherContact"),
-      fatherEmail: formData.get("fatherEmail"),
-      motherName: formData.get("motherName"),
-      motherContact: formData.get("motherContact"),
-      guardianName: formData.get("guardianName"),
-      guardianRelation: formData.get("guardianRelation"),
-      guardianContact: formData.get("guardianContact"),
-      emergencyContact: formData.get("emergencyContact"),
-
-      transportMode: formData.get("transportMode"),
-      busRoute: formData.get("busRoute"),
-      pickupPoint: formData.get("pickupPoint"),
-      driverName: formData.get("driverName"),
-      driverContactNumber: formData.get("driverContactNumber"),
-      vehicleNumber: formData.get("vehicleNumber"),
-
-      previousSchool: formData.get("previousSchool"),
-      previousPerformance: formData.get("lastClassPassed"),
-      previousSchoolBoard: formData.get("previousSchoolBoard"),
-      transferCertificateNumber: formData.get("transferCertificateNumber"),
-
-      feeCategory: formData.get("feeCategory"),
-      scholarship: formData.get("scholarship"),
-      concessionAmount: Number(formData.get("concessionAmount") || 0),
-      paymentHistory: formData.get("paymentHistory"),
-
-      // Keep state values
-      totalFee: Number(totalFee || 0),
-      paidAmount: Number(paidAmount || 0),
-      pendingAmount: Number(pendingAmount || 0),
-      photoPreview,
+      section: classRec?.section || '',
+      dob: formData.get('dob') || '',
+      gender: formData.get('gender') || '',
+      bloodGroup: formData.get('bloodGroup') || '',
+      category: formData.get('category') || '',
+      religion: formData.get('religion') || '',
+      aadharLast4: formData.get('aadharNumber') || '',
+      admissionDate: formData.get('admissionDate') || '',
+      studentStatus: formData.get('studentStatus') || 'Active',
+      address: formData.get('address') || '',
+      fatherName: formData.get('fatherName') || '',
+      fatherContact: formData.get('fatherContact') || '',
+      fatherEmail: formData.get('fatherEmail') || '',
+      motherName: formData.get('motherName') || '',
+      motherContact: formData.get('motherContact') || '',
+      guardianName: formData.get('guardianName') || '',
+      guardianRelation: formData.get('guardianRelation') || '',
+      guardianContact: formData.get('guardianContact') || '',
+      emergencyContact: formData.get('emergencyContact') || '',
+      transportMode: formData.get('transportMode') || '',
+      busRoute: formData.get('busRoute') || '',
+      pickupPoint: formData.get('pickupPoint') || '',
+      driverName: formData.get('driverName') || '',
+      driverContactNumber: formData.get('driverContactNumber') || '',
+      vehicleNumber: formData.get('vehicleNumber') || '',
+      previousSchool: formData.get('previousSchool') || '',
+      previousPerformance: formData.get('lastClassPassed') || '',
+      previousSchoolBoard: formData.get('previousSchoolBoard') || '',
+      transferCertificateNumber: formData.get('transferCertificateNumber') || '',
+      feeCategory: formData.get('feeCategory') || '',
+      scholarship: formData.get('scholarship') || '',
+      concessionAmount: formData.get('concessionAmount') || '0',
+      paymentHistory: formData.get('paymentHistory') || '',
+      totalFee: String(totalFee || 0),
+      paidAmount: String(paidAmount || 0),
+      pendingAmount: String(Math.max(Number(totalFee || 0) - Number(paidAmount || 0), 0)),
     };
 
+    Object.entries(fields).forEach(([key, value]) => payload.append(key, value));
+
     try {
-      await addStudent(student);
-      navigate("/students");
+      await addStudent(payload);
+      navigate('/students');
     } catch (err) {
-      setFormError(err?.message || "Failed to save student. Please try again.");
+      setFormError(err?.message || 'Failed to save student. Please try again.');
     }
   };
 
