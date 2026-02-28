@@ -68,9 +68,8 @@ const statusOptions = [
 ];
 
 const generateAdmissionNumber = () => {
-  const now = Date.now().toString();
-  const randomPart = Math.floor(100 + Math.random() * 900);
-  return `ADM-${now.slice(-6)}${randomPart}`;
+  const hex = crypto.randomUUID().replace(/-/g, '').slice(0, 8).toUpperCase();
+  return `ADM-${hex}`;
 };
 
 function AddStudentPage() {
@@ -169,10 +168,9 @@ function AddStudentPage() {
 
     try {
       await addStudent(student);
-      alert("Student saved!");
       navigate("/students");
-    } catch {
-      setFormError("Failed to save student");
+    } catch (err) {
+      setFormError(err?.message || "Failed to save student. Please try again.");
     }
   };
 

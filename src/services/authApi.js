@@ -1,7 +1,7 @@
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '')
 
 const buildUrl = (path, query = {}) => {
-    const url = new URL(`${API_BASE}${path}`, window.location.origin)
+    const url = new URL(path, API_BASE.endsWith('/') ? API_BASE : API_BASE + '/')
     Object.entries(query).forEach(([key, value]) => {
         if (value === undefined || value === null || value === '') return
         url.searchParams.set(key, String(value))
