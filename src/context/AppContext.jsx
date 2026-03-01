@@ -166,10 +166,13 @@ export function AppProvider({ children }) {
   }
 
   const updateStudent = (updatedStudent) => {
+    const matchId = updatedStudent._id || updatedStudent.id
     setStudentRecords((prev) => {
-      const hasExisting = prev.some((item) => item.id === updatedStudent.id)
+      const hasExisting = prev.some((item) => String(item._id || item.id) === String(matchId))
       if (!hasExisting) return prev
-      return prev.map((item) => (item.id === updatedStudent.id ? { ...item, ...updatedStudent } : item))
+      return prev.map((item) =>
+        String(item._id || item.id) === String(matchId) ? { ...item, ...updatedStudent } : item
+      )
     })
   }
 
@@ -188,10 +191,13 @@ export function AppProvider({ children }) {
   }
 
   const updateTeacher = (updatedTeacher) => {
+    const matchId = updatedTeacher._id || updatedTeacher.id
     setTeacherRecords((prev) => {
-      const hasExisting = prev.some((item) => item.id === updatedTeacher.id)
+      const hasExisting = prev.some((item) => String(item._id || item.id) === String(matchId))
       if (!hasExisting) return prev
-      return prev.map((item) => (item.id === updatedTeacher.id ? { ...item, ...updatedTeacher } : item))
+      return prev.map((item) =>
+        String(item._id || item.id) === String(matchId) ? { ...item, ...updatedTeacher } : item
+      )
     })
   }
 
