@@ -43,3 +43,18 @@ export const getStaff = () =>
     request('/api/v1/staff', {
         method: 'GET',
     })
+
+// Bulk mark attendance — only exceptions (Absent/Late/Half-Day) are saved
+// Body: { date: 'YYYY-MM-DD', entries: [{ userId, userRole, status }] }
+export const bulkMarkAttendance = (date, entries) =>
+    request('/api/v1/attendance/bulk', {
+        method: 'POST',
+        body: { date, entries },
+    })
+
+// Fetch existing exception records for a date and role
+export const getAttendanceExceptions = (date, role) =>
+    request('/api/v1/attendance', {
+        method: 'GET',
+        query: { date, role },
+    })

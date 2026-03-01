@@ -15,6 +15,7 @@ const navItems = [
         submenu: [
             { id: 'attendance_students', label: 'Student Attendance', route: '/attendance/students' },
             { id: 'attendance_teachers', label: 'Teacher Attendance', route: '/attendance/teachers' },
+            { id: 'attendance_staff', label: 'Staff Attendance', route: '/attendance/staff' },
         ],
     },
     { id: 'notices', label: 'Notice Board', route: '/notices', icon: 'M4 5.5h12v8h-5.2L8 16v-2.5H4z' },

@@ -18,6 +18,9 @@ import NoticePage from './pages/NoticePage'
 import StudentAttendancePage from './pages/StudentAttendancePage'
 import TeacherAttendancePage from './pages/TeacherAttendancePage'
 import IncomeExpenseDetailsPage from './pages/IncomeExpenseDetailsPage'
+import StaffTeacherAttendancePage from './pages/StaffTeacherAttendancePage'
+import TeacherAttendanceMarkPage from './pages/TeacherAttendanceMarkPage'
+import StaffAttendanceMarkPage from './pages/StaffAttendanceMarkPage'
 
 const SPLASH_SEEN_KEY = 'erp_splash_seen_v1'
 
@@ -59,7 +62,9 @@ function AppContent() {
         <Route path="/fees" element={<ProtectedRoute><FeeManagementPage /></ProtectedRoute>} />
         <Route path="/notices" element={<ProtectedRoute><NoticePage /></ProtectedRoute>} />
         <Route path="/attendance/students" element={<ProtectedRoute><StudentAttendancePage /></ProtectedRoute>} />
-        <Route path="/attendance/teachers" element={<ProtectedRoute><TeacherAttendancePage /></ProtectedRoute>} />
+        <Route path="/attendance/teachers" element={<ProtectedRoute><TeacherAttendanceMarkPage /></ProtectedRoute>} />
+        <Route path="/attendance/staff" element={<ProtectedRoute><StaffAttendanceMarkPage /></ProtectedRoute>} />
+        <Route path="/attendance/staff-teacher" element={<ProtectedRoute><StaffTeacherAttendancePage /></ProtectedRoute>} />
         <Route path="/marksheet" element={<ProtectedRoute><MarksheetPage /></ProtectedRoute>} />
         <Route path="/finance" element={<ProtectedRoute><IncomeExpenseDetailsPage /></ProtectedRoute>} />
         <Route path="/guide" element={<ProtectedRoute><GuidePage /></ProtectedRoute>} />
